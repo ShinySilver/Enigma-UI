@@ -14,40 +14,35 @@ namespace GUI{
   class Button : public Component, private ActionListener{
 
     public:
-      Button(std::string text, sf::Color bgColor, float posX, float posY, std::string fontPath= "arialbd.ttf"):bgColor_{bgColor},x_{posX}, y_{posY} {
+      Button(std::string text, sf::Color bgColor, sf::Vector2f pos, sf::Vector2f size, std::string fontPath= "arialbd.ttf"):
+        bgColor_{bgColor},pos_{pos}, size_{size}, rectangle_{size}{
+        // TODO: faire un gestionnaire des polices
         if(!font_.loadFromFile(fontPath))      throw std::runtime_error("Could not find font at " + fontPath);
         text_ = sf::Text{text, font_};
-      }
-
-      Button(std::string text, std::string iconPath, float posX, float posY, std::string fontPath= "arialbd.ttf"):x_{posX}, y_{posY} {
-        if(!font_.loadFromFile(fontPath))      throw std::runtime_error("Could not find font at " + fontPath);
-        text_= sf::Text{text, font_};
-
-        if (!texture_.loadFromFile(iconPath))   throw std::runtime_error("Could not find texture at " + iconPath);
-        texture_.setSmooth(true);
-        //texture_.setRepeated(true);
-        auto size = texture_.getSize();
-        sprite_.setTexture(texture_);
-        sprite_.setOrigin((float)size.x/2,(float)size.y/2);
-        sprite_.setPosition(sf::Vector2f(posX, posY));
-        std::cout << "Loaded texture : '" << iconPath << "'\n";
+        sprite_->setPosition(pos_.x, pos_.y);
       }
 
       void render(sf::RenderTarget& target, sf::RenderStates states=sf::RenderStates::Default) override{
-        target.draw(sprite_, states);
+        if(sprite_) target.draw(*sprite_, states);
       }
 
       bool contains(int posX, int posY){
-        return true;
+        return posX<pos_.x+size_.x/2.0 && posX>pos_.x-size_.x/2.0
+               && posY<pos_.y+size_.y/2.0 && posY>pos_.y-size_.y/2.0;
+      }
+
+      void setIcon(sf::Texture *texture){
+        auto size = texture->getSize();
+        sprite_->setTexture(*texture);
+        sprite_->setOrigin((float)size.x/2,(float)size.y/2);
       }
 
     private:
       sf::Text text_;
-      sf::Texture texture_;
-      sf::Sprite sprite_;
+      sf::Sprite *sprite_;
       sf::Color bgColor_;
-      float x_, y_;
-      sf::RectangleShape rectangle;
+      sf::Vector2f pos_, size_;
+      sf::RectangleShape rectangle_;
       sf::Font font_;
 
   };

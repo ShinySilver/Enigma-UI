@@ -21,3 +21,11 @@ int main(void) {
   std::cout << "Normal end\n";
   return 0;
 }
+
+static sf::Texture loadTextureFromFile(std::string path){
+  sf::Texture texture;
+  if (!texture.loadFromFile(path))   throw std::runtime_error("Could not find texture at " + path);
+  texture.setSmooth(true);
+  std::cout << "Loaded texture : '" << path << "'\n";
+  return texture;
+}

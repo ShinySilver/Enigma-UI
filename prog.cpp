@@ -1,6 +1,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <SFML/Graphics/Color.hpp>
 
 #include "window.hpp"
 #include "button.hpp"
@@ -13,7 +14,9 @@ int main(void) {
   GUI::Window win{"ENIgma UI", 800.0,480.0};
   GUI::Container c{};
   GUI::Image img{"sphere.png", 400, 240};
+  GUI::Button btn{"Mode match", sf::Vector2f(400,240)};
   c.addComponent(&img);
+  c.addComponent(&btn);
   win.setContent(&c);
 
 

@@ -5,6 +5,6 @@
 
 class ActionListener{
 public:
-  virtual void actionPerformed(sf::Event keyEvent) = 0;
+  virtual void actionPerformed(sf::Event e) = 0;
 };
 #endif

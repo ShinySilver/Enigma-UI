@@ -68,8 +68,14 @@ namespace GUI{
       }
 
       void actionPerformed(sf::Event e) override{
-      std::cout<<"Button with label '"<< (std::string)text_.getString() << "' pressed!\n";
-        if(e.type == sf::Event::MouseButtonPressed && this->contains(e.mouseButton.x, e.mouseButton.y) && cb_) cb_();
+        //std::cout<<"Event transmitted to button!\n";
+        if(e.type == sf::Event::MouseButtonPressed){
+          //std::cout<<"MouseButtonEvent transmitted to button!\n";
+          if (this->contains(e.mouseButton.x, e.mouseButton.y)){
+            std::cout<<"Button pressed!\n";
+            if(cb_) cb_();
+          }
+        }
       }
 
     private:

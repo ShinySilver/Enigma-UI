@@ -61,7 +61,13 @@ namespace GUI {
         return;
       }
       contentPaneMutex.lock();
-      if(contentPane_) for_each(contentPane_->getActionListeners().begin(), contentPane_->getActionListeners().end(), [&](ActionListener *a){a->actionPerformed(e);});
+      if(contentPane_){
+        //std::cout<<"Handling event...\n";
+        for(auto l : contentPane_->getActionListeners()){
+          l->actionPerformed(e);
+        }
+        //std::cout<<"Event handled!\n";
+      }
       contentPaneMutex.unlock();
     }
   }

@@ -2,6 +2,7 @@
 #define CONTAINER_HPP
 
 #include <vector>
+#include <iostream>
 
 #include "component.hpp"
 #include "SFML/Graphics.hpp"
@@ -10,7 +11,7 @@
 namespace GUI{
   class Container : public Component, ActionListener{
     public:
-      Container():components{}{}
+      Container():Component{}, components_{}{this->addActionListener(this);}
 
       /**
        * Rajoute un élément graphique au container
@@ -22,11 +23,16 @@ namespace GUI{
 
       // ActionListener
       void actionPerformed(sf::Event event) override {
-        for_each(getActionListeners().begin(), getActionListeners().end(), [&](ActionListener *a){a->actionPerformed(event);});
+        for(auto c : components_){
+          for(auto l : c->getActionListeners()){
+            l->actionPerformed(event);
+          }
+        }
+        //std::cout<<"done transmitting event!\n";
       }
 
     private:
-      std::vector<Component*> components;
+      std::vector<Component*> components_;
   };
 }
 #endif

@@ -5,7 +5,7 @@
 
 #include "window.hpp"
 #include "button.hpp"
-#include "image.hpp"
+#include "rotatingImage.hpp"
 #include "container.hpp"
 
 #define DEBUG 1
@@ -13,10 +13,16 @@
 int main(void) {
   GUI::Window win{"ENIgma UI", 800.0,480.0};
   GUI::Container c{};
-  GUI::Image img{"sphere.png", 400, 240};
-  GUI::Button btn{"Mode match", sf::Vector2f(400,240)};
-  c.addComponent(&img);
-  c.addComponent(&btn);
+  GUI::RotatingImage bgImg{"assets/textures/Aperture.png", 400, 240};
+  GUI::Image title{"assets/textures/title.png", 400, 100};
+  GUI::Button btn1{"Mode match", sf::Vector2f(400,220)};
+  GUI::Button btn2{"Mode protocole", sf::Vector2f(400,280)};
+  GUI::Button btn3{"Mode manuel", sf::Vector2f(400,340)};
+  c.addComponent(&bgImg);
+  c.addComponent(&title);
+  c.addComponent(&btn1);
+  c.addComponent(&btn2);
+  c.addComponent(&btn3);
   win.setContent(&c);
 
 

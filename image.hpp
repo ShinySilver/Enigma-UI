@@ -25,14 +25,15 @@ namespace GUI{
       }
 
       void render(sf::RenderTarget& target, sf::RenderStates states=sf::RenderStates::Default) override{
-        sprite_.rotate(360/90);
         target.draw(sprite_, states);
       }
 
     private:
         sf::Texture texture_;
-        sf::Sprite sprite_;
         float x_, y_;
+
+    protected:
+      sf::Sprite sprite_;
   };
 }
 #endif /* end of include guard: IMAGE_HPP */

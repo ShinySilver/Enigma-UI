@@ -18,7 +18,7 @@ namespace GUI{
           sf::Color bgColor=sf::Color::White,
           sf::Color fgColor=sf::Color::Black,
           void (*callback)() = 0,
-          std::string fontPath= "arialbd.ttf"):
+          std::string fontPath= "assets/fonts/arialbd.ttf"):
               pos_{pos},
               cb_{callback}{
         // TODO: faire un gestionnaire des polices

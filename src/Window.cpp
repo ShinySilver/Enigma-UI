@@ -20,6 +20,11 @@ namespace GUI {
   }
 
   void Window::join(){
+    if(renderer_.joinable()){
+      std::cout<<"Waiting for the display to close...\n";
+      renderer_.join();
+      std::cout<<"Display closed.\n";
+    }
     if(eventHandler_.joinable()){
       std::cout<<"Waiting for the EventHandler to finish...\n";
       eventHandler_.join();

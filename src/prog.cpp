@@ -29,7 +29,6 @@ int main(void) {
 
   win.join();
   std::cout << "Normal end\n";
-  exit(0); //TODO se passer du exit(0) ^^' Il y a un trhead que je ne join pas apparament
   return 0;
 }
 

@@ -4,8 +4,9 @@
 #include <vector>
 #include <iostream>
 
-#include "component.hpp"
 #include "SFML/Graphics.hpp"
+
+#include "Component.hpp"
 
 
 namespace GUI{

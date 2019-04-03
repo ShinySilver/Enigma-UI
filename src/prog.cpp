@@ -1,12 +1,13 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
-#include <SFML/Graphics/Color.hpp>
 
-#include "window.hpp"
-#include "button.hpp"
-#include "rotatingImage.hpp"
-#include "container.hpp"
+#include "SFML/Graphics/Color.hpp"
+
+#include "Window.hpp"
+#include "Button.hpp"
+#include "RotatingImage.hpp"
+#include "Container.hpp"
 
 #define DEBUG 1
 
@@ -28,6 +29,7 @@ int main(void) {
 
   win.join();
   std::cout << "Normal end\n";
+  exit(0); //TODO se passer du exit(0) ^^' Il y a un trhead que je ne join pas apparament
   return 0;
 }
 

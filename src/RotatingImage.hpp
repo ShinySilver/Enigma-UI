@@ -5,8 +5,9 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/System.hpp"
-#include "component.hpp"
-#include "image.hpp"
+
+#include "Component.hpp"
+#include "Image.hpp"
 
 namespace GUI{
   class RotatingImage : public Image{

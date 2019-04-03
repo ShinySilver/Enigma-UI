@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 
-#include "window.hpp"
+#include "Window.hpp"
 
 namespace GUI {
 

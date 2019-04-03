@@ -4,7 +4,8 @@
 #include <vector>
 
 #include "SFML/Graphics.hpp"
-#include "actionListener.hpp"
+
+#include "ActionListener.hpp"
 
 /**
  * Not for multithreaded use

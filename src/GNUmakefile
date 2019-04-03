@@ -184,18 +184,18 @@ ${LIB_TARGET} : ${COMMON_OBJECT_FILES}
 #~~~~ linker command to produce the executable files (if any) ~~~~
 %${EXE_SUFFIX} : %.o ${COMMON_OBJECT_FILES}
 	@echo ==== linking $@ ====
-	${LD} -o $@ $^ ${CPPFLAGS} ${LDFLAGS}
+	cd ../build/;${LD} -o $@ $^ ${CPPFLAGS} ${LDFLAGS}
 	@${SKIP_LINE}
 
 #~~~~ compiler command for every source file ~~~~
 %.o : %.c
 	@echo ==== compiling [opt=${opt}] $< ====
-	${CC} -o $@ $< -c ${CPPFLAGS} ${CFLAGS}
+	${CC} -o ../build/$@ $< -c ${CPPFLAGS} ${CFLAGS}
 	@${SKIP_LINE}
 
 %.o : %.cpp
 	@echo ==== compiling [opt=${opt}] $< ====
-	${CXX} -o $@ $< -c ${CPPFLAGS} ${CXXFLAGS}
+	${CXX} -o ../build/$@ $< -c ${CPPFLAGS} ${CXXFLAGS}
 	@${SKIP_LINE}
 
 -include ${DEPEND_FILES}
@@ -203,7 +203,7 @@ ${LIB_TARGET} : ${COMMON_OBJECT_FILES}
 #~~~~ remove generated files ~~~~
 clean :
 	@echo ==== cleaning ====
-	${REMOVE} ${GENERATED_FILES}
+	cd ../build/;${REMOVE} ${GENERATED_FILES}
 	@${SKIP_LINE}
 
 #-----------------------------------------------------------------------------

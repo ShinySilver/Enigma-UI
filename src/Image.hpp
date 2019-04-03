@@ -2,11 +2,12 @@
 #define IMAGE_HPP
 
 #include <string.h>
+#include <iostream>
 
 #include "SFML/Graphics.hpp"
 #include "SFML/System.hpp"
-#include "component.hpp"
-#include "iostream"
+
+#include "Component.hpp"
 
 namespace GUI{
   class Image : public Component{

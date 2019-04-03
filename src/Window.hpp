@@ -7,7 +7,8 @@
 #include <mutex>
 
 #include "SFML/Graphics.hpp"
-#include "component.hpp"
+
+#include "Component.hpp"
 
 namespace GUI {
   class Window {

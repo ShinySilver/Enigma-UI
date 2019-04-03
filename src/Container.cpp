@@ -1,5 +1,5 @@
-#include "container.hpp"
-#include "component.hpp"
+#include "Container.hpp"
+#include "Component.hpp"
 
 namespace GUI{
   void Container::render(sf::RenderTarget& target, sf::RenderStates states){

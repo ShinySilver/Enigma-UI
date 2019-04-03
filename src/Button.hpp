@@ -3,11 +3,13 @@
 
 #include <string>
 #include <functional>
+#include <iostream>
 
 #include "SFML/Graphics.hpp"
 #include "SFML/System.hpp"
-#include "component.hpp"
-#include "iostream"
+
+#include "Component.hpp"
+
 
 namespace GUI{
   class Button : public Component, private ActionListener{

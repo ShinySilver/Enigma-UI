@@ -1,4 +1,6 @@
 *.ttf
 *.o
 *.d
-build/*
+build/*.o
+build/*.d
+prog

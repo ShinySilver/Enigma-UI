@@ -35,7 +35,7 @@ static GUI::Container *mainMenu=[](){
 
 int main(void) {
   win = new GUI::Window("ENIgma UI", 800.0,480.0);
-  win->setContent(subMenu);
+  win->setContent(mainMenu);
 
   win->join();
   std::cout << "Normal end\n";

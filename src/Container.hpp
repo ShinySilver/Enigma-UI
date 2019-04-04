@@ -29,8 +29,9 @@ namespace GUI{
             l->actionPerformed(event);
           }
         }
-        //std::cout<<"done transmitting event!\n";
       }
+
+
 
     private:
       std::vector<Component*> components_;

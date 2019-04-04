@@ -17,8 +17,8 @@ namespace GUI{
     public:
       Button(std::string text, sf::Vector2f pos,
           sf::Vector2f size = sf::Vector2f(0,0),
-          sf::Color bgColor=sf::Color::White,
-          sf::Color fgColor=sf::Color::Black,
+          const sf::Color bgColor=sf::Color::White,
+          const sf::Color fgColor=sf::Color::Black,
           void (*callback)() = 0,
           std::string fontPath= "assets/fonts/arialbd.ttf"):
               pos_{pos},

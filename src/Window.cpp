@@ -7,9 +7,11 @@
 namespace GUI {
 
   void Window::setContent(Component *c){
+    winMutex.lock();
     contentPaneMutex.lock();
     contentPane_ = c;
     contentPaneMutex.unlock();
+    winMutex.unlock();
     //render();
   }
 

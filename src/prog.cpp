@@ -27,7 +27,7 @@ int main(void) {
   /**
    * Init main menu
    */
-  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,0), sf::Color::White, sf::Color::Black, [](){win->setContent(subMenu);std::cout<<"Menu changé!\n";}};
+  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,0), [](){win->setContent(subMenu);}};
   GUI::Button btn2 {"Mode protocole", sf::Vector2f(400,280)};
   GUI::Button btn3 {"Mode manuel", sf::Vector2f(400,340)};
   *mainMenu<<bgImg<<title<<&btn1<<&btn2<<&btn3;
@@ -36,7 +36,8 @@ int main(void) {
   /**
    * Init submenu
    */
-  *subMenu<<bgImg;
+   GUI::Button btn4 {"->", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
+  *subMenu<<bgImg<<&btn4;
 
   /**
    * Init Window

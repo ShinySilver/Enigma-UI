@@ -17,9 +17,10 @@ namespace GUI{
     public:
       Button(std::string text, sf::Vector2f pos,
           sf::Vector2f size = sf::Vector2f(0,0),
-          const sf::Color bgColor=sf::Color::White,
-          const sf::Color fgColor=sf::Color::Black,
           void (*callback)() = 0,
+          const sf::Color borderColor=sf::Color::White,
+          const sf::Color fgColor=sf::Color::Black,
+          const sf::Color textColor = sf::Color::Black,
           std::string fontPath= "assets/fonts/arialbd.ttf"):
               pos_{pos},
               cb_{callback}{
@@ -29,14 +30,15 @@ namespace GUI{
         sf::FloatRect textRect = text_.getLocalBounds();
         text_.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
         text_.setPosition(pos_.x, pos_.y);
-        text_.setFillColor(fgColor);
+        text_.setFillColor(textColor);
 
         size.x=std::max(size.x,textRect.width+16);
         size.y=std::max(size.y,textRect.height+8);
+
         rectangle_ = sf::RectangleShape(size);
         rectangle_.setOrigin(size.x/2, size.y/2);
         rectangle_.setPosition(pos_.x, pos_.y);
-        border_.setFillColor(bgColor);
+        rectangle_.setFillColor(borderColor);
 
         size+={2,2};
         border_ = sf::RectangleShape(size);
@@ -74,7 +76,7 @@ namespace GUI{
         if(e.type == sf::Event::MouseButtonPressed){
           //std::cout<<"MouseButtonEvent transmitted to button!\n";
           if (this->contains(e.mouseButton.x, e.mouseButton.y)){
-            std::cout<<"Button pressed!\n";
+            //std::cout<<"Button pressed!\n";
             if(cb_) cb_();
           }
         }

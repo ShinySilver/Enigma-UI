@@ -25,7 +25,7 @@ namespace GUI{
       // ActionListener
       void actionPerformed(sf::Event event) override {
         for(auto c : components_){
-          for(auto l : c->getActionListeners()){
+          for(auto l : *(c->getActionListeners())){
             l->actionPerformed(event);
           }
         }

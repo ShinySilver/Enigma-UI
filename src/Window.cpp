@@ -7,11 +7,10 @@
 namespace GUI {
 
   void Window::setContent(Component *c){
-    winMutex.lock();
     contentPaneMutex.lock();
     contentPane_ = c;
+    std::cout<<"ContentPane Changed!\n";
     contentPaneMutex.unlock();
-    winMutex.unlock();
     //render();
   }
 
@@ -68,14 +67,16 @@ namespace GUI {
         return;
       }
       contentPaneMutex.lock();
+      const std::vector<ActionListener *> *actionListeners;
       if(contentPane_){
-        //std::cout<<"Handling event...\n";
-        for(auto l : contentPane_->getActionListeners()){
+        actionListeners = contentPane_->getActionListeners();
+        contentPaneMutex.unlock();
+        for(auto l : *actionListeners){
           l->actionPerformed(e);
         }
-        //std::cout<<"Event handled!\n";
+      }else{
+        contentPaneMutex.unlock();
       }
-      contentPaneMutex.unlock();
     }
   }
 

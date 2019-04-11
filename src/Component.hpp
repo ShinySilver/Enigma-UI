@@ -16,7 +16,7 @@ namespace GUI{
       Component():listeners{}{};
       virtual void render(sf::RenderTarget& target, sf::RenderStates states=sf::RenderStates::Default) = 0;
       void addActionListener(ActionListener *e) {listeners.emplace_back(e);}
-      const std::vector<ActionListener *> getActionListeners() {return listeners;}
+      const std::vector<ActionListener *> *getActionListeners() {return &listeners;}
     private:
       std::vector<ActionListener *> listeners;
   };

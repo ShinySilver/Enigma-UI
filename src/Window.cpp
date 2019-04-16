@@ -11,7 +11,7 @@ namespace GUI {
     contentPane_ = c;
     std::cout<<"ContentPane Changed!\n";
     contentPaneMutex.unlock();
-    //render();
+    render();
   }
 
   void Window::close(){
@@ -38,20 +38,22 @@ namespace GUI {
     auto next_frame = std::chrono::steady_clock::now();
     while(true){
       next_frame += std::chrono::milliseconds(1000/30); // 30 render per second
+
+      winMutex.lock();
       if(!win_.isOpen()) return;
       render();
+      winMutex.unlock();
+
       std::this_thread::sleep_until(next_frame);
     }
   }
 
   void Window::render(){
-    winMutex.lock();
     win_.clear(bgColor_);
     contentPaneMutex.lock();
     if(contentPane_)contentPane_->render(this->win_);
     contentPaneMutex.unlock();
     win_.display();
-    winMutex.unlock();
   }
 
   void Window::handleEvent(){
@@ -70,7 +72,11 @@ namespace GUI {
         return;
       }else if (e.type == sf::Event::MouseButtonReleased
                 || e.type == sf::Event::TouchEnded){
-        if(!animated_) render();
+        if(!animated_){
+          winMutex.lock();
+          render();
+          winMutex.unlock();
+        }
       }
       contentPaneMutex.lock();
       const std::vector<ActionListener *> *actionListeners;

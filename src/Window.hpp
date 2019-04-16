@@ -26,7 +26,6 @@ namespace GUI {
         winMutex.lock();
         win_.requestFocus();
         winMutex.unlock();
-        render();
       }
 
       Window(const Window&) = delete;

@@ -33,22 +33,25 @@ namespace GUI {
     }
   }
 
-  void Window::render(){
+  void Window::renderLoop(){
+    if(!animated_) return; // Si on désactive les animations, les rendus sont générés par les events
     auto next_frame = std::chrono::steady_clock::now();
     while(true){
-       next_frame += std::chrono::milliseconds(1000/30); // 30 render per second
-
-       winMutex.lock();
-       if(!win_.isOpen()) return;
-       win_.clear(bgColor_);
-       contentPaneMutex.lock();
-       if(contentPane_) contentPane_->render(this->win_);
-       contentPaneMutex.unlock();
-       win_.display();
-       winMutex.unlock();
-
-       std::this_thread::sleep_until(next_frame);
+      next_frame += std::chrono::milliseconds(1000/30); // 30 render per second
+      if(!win_.isOpen()) return;
+      render();
+      std::this_thread::sleep_until(next_frame);
     }
+  }
+
+  void Window::render(){
+    winMutex.lock();
+    win_.clear(bgColor_);
+    contentPaneMutex.lock();
+    if(contentPane_)contentPane_->render(this->win_);
+    contentPaneMutex.unlock();
+    win_.display();
+    winMutex.unlock();
   }
 
   void Window::handleEvent(){
@@ -65,6 +68,9 @@ namespace GUI {
       if (e.type == sf::Event::Closed){
         close();
         return;
+      }else if (e.type == sf::Event::MouseButtonReleased
+                || e.type == sf::Event::TouchEnded){
+        if(!animated_) render();
       }
       contentPaneMutex.lock();
       const std::vector<ActionListener *> *actionListeners;

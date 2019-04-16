@@ -13,7 +13,7 @@
 
 GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
 
-static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0);
+static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, false);
 static GUI::Container *mainMenu = new GUI::Container();
 static GUI::Container *subMenu = new GUI::Container();
 
@@ -21,7 +21,7 @@ int main(void) {
   /**
    * Loading ressources
    */
-  GUI::RotatingImage *bgImg = new GUI::RotatingImage("assets/textures/Aperture.png", 400, 240);
+  GUI::Image *bgImg = new GUI::Image("assets/textures/Aperture.png", 400, 240);
   GUI::Image *title = new GUI::Image("assets/textures/title.png", 400, 100);
 
   /**

@@ -13,18 +13,20 @@
 namespace GUI {
   class Window {
     public :
-      Window(std::string n="Window", double w=800.0, double h=480.0, sf::Color bgColor = sf::Color(0, 100, 100)):
+      Window(std::string n="Window", double w=800.0, double h=480.0, bool animated = true, sf::Color bgColor = sf::Color(0, 100, 100)):
                                                           win_{sf::VideoMode{(unsigned int)w, (unsigned int)h}, n.data()},
                                                           winMutex{},
                                                           contentPane_{},
                                                           contentPaneMutex{},
                                                           bgColor_{bgColor},
+                                                          animated_{animated},
                                                           eventHandler_{&Window::handleEvent, this},
-                                                          renderer_{&Window::render, this}
+                                                          renderer_{&Window::renderLoop, this}
       {
         winMutex.lock();
         win_.requestFocus();
         winMutex.unlock();
+        render();
       }
 
       Window(const Window&) = delete;
@@ -40,6 +42,7 @@ namespace GUI {
     private :
       void handleEvent();
       void render();
+      void renderLoop();
 
       sf::RenderWindow win_;
       std::mutex winMutex; // Protège le code SFML
@@ -49,6 +52,7 @@ namespace GUI {
 
       sf::Color bgColor_;
 
+      std::atomic_bool animated_;
       std::thread eventHandler_;
       std::thread renderer_;
   };

@@ -88,8 +88,8 @@ else
   MAIN_C_FILES=${wildcard ${strip ${EXE_PREFIX}}*.c}
   MAIN_CXX_FILES=${wildcard ${strip ${EXE_PREFIX}}*.cpp}
 endif
-COMMON_C_FILES=${filter-out ${MAIN_C_FILES},${wildcard *.c}}
-COMMON_CXX_FILES=${filter-out ${MAIN_CXX_FILES},${wildcard *.cpp}}
+COMMON_C_FILES=${filter-out ${MAIN_C_FILES},${wildcard */*.c}}
+COMMON_CXX_FILES=${filter-out ${MAIN_CXX_FILES},${wildcard */*.cpp}}
 #
 MAIN_OBJECT_FILES=${sort ${patsubst %.c,%.o,${MAIN_C_FILES}} \
                          ${patsubst %.cpp,%.o,${MAIN_CXX_FILES}}}

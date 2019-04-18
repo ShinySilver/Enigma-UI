@@ -4,10 +4,10 @@
 
 #include "SFML/Graphics/Color.hpp"
 
-#include "Window.hpp"
-#include "Button.hpp"
-#include "RotatingImage.hpp"
-#include "Container.hpp"
+#include "GUI/Window.hpp"
+#include "GUI/Button.hpp"
+#include "GUI/RotatingImage.hpp"
+#include "GUI/Container.hpp"
 
 #define DEBUG 1
 

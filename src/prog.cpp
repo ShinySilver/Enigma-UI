@@ -8,6 +8,7 @@
 #include "GUI/Button.hpp"
 #include "GUI/RotatingImage.hpp"
 #include "GUI/Container.hpp"
+#include "Utils/Settings.hpp"
 
 #define DEBUG 1
 
@@ -25,6 +26,13 @@ int main(void) {
   GUI::Image *title = new GUI::Image("assets/textures/title.png", 400, 100);
 
   /**
+   * Settings
+   */
+  Utils::Settings::setFlag("isLeftSide",0);
+  Utils::Settings::setFlag("maxPwm",0);
+
+
+  /**
    * Init main menu
    */
   GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,0), [](){win->setContent(subMenu);}};
@@ -38,6 +46,11 @@ int main(void) {
    */
    GUI::Button btn4 {"->", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
   *subMenu<<bgImg<<&btn4;
+
+  /**
+   * Init AI
+   */
+
 
   /**
    * Init Window

@@ -9,6 +9,7 @@
 #include "GUI/RotatingImage.hpp"
 #include "GUI/Container.hpp"
 #include "GUI/Displayer.hpp"
+#include "GUI/Label.hpp"
 
 #include "Utils/Settings.hpp"
 
@@ -32,6 +33,7 @@ int main(void) {
    */
   Utils::Settings::setFlag("isLeftSide",0);
   Utils::Settings::setFlag("maxPwm",0);
+  Utils::Settings::setFlag("isStarterReady",0);
 
 
   /**
@@ -46,10 +48,17 @@ int main(void) {
   /**
    * Init submenu
    */
-  GUI::Button btn4 {"->", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
-  std::string (*updater)()  = []() -> std::string {return (Utils::Settings::getFlag("isLeftSide")?"Side: Left ":"Side: Right");};
-  GUI::Displayer display1 {updater, sf::Vector2f(400,240),sf::Vector2f(0,40),[](){Utils::Settings::setFlag("isLeftSide",!Utils::Settings::getFlag("isLeftSide"));}};
-  *subMenu<<bgImg<<&btn4<<&display1;
+  GUI::Label label1 {"Parametrage:", sf::Vector2f(400,100)};
+  std::string (*updater1)()  = []() -> std::string {return (Utils::Settings::getFlag("isLeftSide")?"Side: Left ":"Side: Right");};
+  GUI::Displayer display1 {updater1, sf::Vector2f(400,160),sf::Vector2f(0,40),[](){Utils::Settings::setFlag("isLeftSide",!Utils::Settings::getFlag("isLeftSide"));}};
+  GUI::Button btn5 {"LM_Ready: False", sf::Vector2f(400,210),sf::Vector2f(0,40)};
+
+  GUI::Label label2 {"Starter & Supervision:", sf::Vector2f(400,280)};
+  std::string (*updater2)()  = []() -> std::string {return (Utils::Settings::getFlag("isStarterReady")?"Starter: Ready ":"Starter: NOT READY");};
+  GUI::Displayer display2 {updater2, sf::Vector2f(400,340),sf::Vector2f(0,40);
+
+  GUI::Button btn4 {">>", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
+  *subMenu<<bgImg<<&btn4<<&btn5<<&display1<<&label1<<&label2<<&display2;
 
   /**
    * Init AI

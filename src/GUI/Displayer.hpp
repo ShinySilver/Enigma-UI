@@ -50,14 +50,10 @@ namespace GUI{
       }
 
       void render(sf::RenderTarget& target, sf::RenderStates states=sf::RenderStates::Default) override{
-        update();
+        text_.setString(textRef_());
         target.draw(border_, states);
         target.draw(rectangle_, states);
         target.draw(text_, states);
-      }
-
-      inline void update(){
-        text_.setString(textRef_());
       }
 
       inline bool contains(int posX, int posY){

@@ -8,6 +8,8 @@
 #include "GUI/Button.hpp"
 #include "GUI/RotatingImage.hpp"
 #include "GUI/Container.hpp"
+#include "GUI/Displayer.hpp"
+
 #include "Utils/Settings.hpp"
 
 #define DEBUG 1
@@ -35,17 +37,19 @@ int main(void) {
   /**
    * Init main menu
    */
-  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,0), [](){win->setContent(subMenu);}};
-  GUI::Button btn2 {"Mode protocole", sf::Vector2f(400,280)};
-  GUI::Button btn3 {"Mode manuel", sf::Vector2f(400,340)};
+  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,40), [](){win->setContent(subMenu);}};
+  GUI::Button btn2 {"Mode protocole", sf::Vector2f(400,280),sf::Vector2f(0,40)};
+  GUI::Button btn3 {"Mode manuel", sf::Vector2f(400,340),sf::Vector2f(0,40)};
   *mainMenu<<bgImg<<title<<&btn1<<&btn2<<&btn3;
 
 
   /**
    * Init submenu
    */
-   GUI::Button btn4 {"->", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
-  *subMenu<<bgImg<<&btn4;
+  GUI::Button btn4 {"->", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
+  std::string (*updater)()  = []() -> std::string {return (Utils::Settings::getFlag("isLeftSide")?"Side: Left ":"Side: Right");};
+  GUI::Displayer display1 {updater, sf::Vector2f(400,240),sf::Vector2f(0,40),[](){Utils::Settings::setFlag("isLeftSide",!Utils::Settings::getFlag("isLeftSide"));}};
+  *subMenu<<bgImg<<&btn4<<&display1;
 
   /**
    * Init AI
@@ -60,11 +64,3 @@ int main(void) {
   std::cout << "Normal end\n";
   return 0;
 }
-
-/*static sf::Texture loadTextureFromFile(std::string path){
-  sf::Texture texture;
-  if (!texture.loadFromFile(path))   throw std::runtime_error("Could not find texture at " + path);
-  texture.setSmooth(true);
-  std::cout << "Loaded texture : '" << path << "'\n";
-  return texture;
-}*/

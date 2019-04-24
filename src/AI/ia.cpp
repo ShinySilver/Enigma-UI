@@ -32,7 +32,7 @@ void IA::autoselectProtocol() {
 
 void IA::update() {
   if(!active)return;
-  if (true) { // ############################# isBusy()
+  if (/*isBusy()*/true) { // #############################
     if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {
       autoselectProtocol();
     }

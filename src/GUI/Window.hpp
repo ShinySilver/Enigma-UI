@@ -13,13 +13,13 @@
 namespace GUI {
   class Window {
     public :
-      Window(std::string n="Window", double w=800.0, double h=480.0, bool animated = true, sf::Color bgColor = sf::Color(0, 100, 100)):
+      Window(std::string n="Window", double w=800.0, double h=480.0, double framerate = 0.5, sf::Color bgColor = sf::Color(0, 100, 100)):
                                                           win_{sf::VideoMode{(unsigned int)w, (unsigned int)h}, n.data()},
                                                           winMutex{},
                                                           contentPane_{},
                                                           contentPaneMutex{},
                                                           bgColor_{bgColor},
-                                                          animated_{animated},
+                                                          framerate_{framerate},
                                                           eventHandler_{&Window::handleEvent, this},
                                                           renderer_{&Window::renderLoop, this}
       {
@@ -51,7 +51,7 @@ namespace GUI {
 
       sf::Color bgColor_;
 
-      std::atomic_bool animated_;
+      std::atomic<double> framerate_;
       std::thread eventHandler_;
       std::thread renderer_;
   };

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <mutex>
 
 namespace Utils{
   class Settings{ // static class. Yeah.
@@ -15,6 +16,7 @@ namespace Utils{
       } DictionnaryEntry;
     private:
       static std::vector<DictionnaryEntry> dictionnary;
+      static std::mutex dictionnaryMutex;
   };
 }
 

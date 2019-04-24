@@ -34,10 +34,16 @@ namespace GUI {
   }
 
   void Window::renderLoop(){
-    if(!animated_) return; // Si on désactive les animations, les rendus sont générés par les events
+    if(framerate_==0){
+      std::cout<<"Render loop disabled\n";
+      return;
+    }
+     // Si on désactive les animations, les rendus sont générés par les events
+    const auto period = std::chrono::milliseconds((int)(1000/framerate_));
     auto next_frame = std::chrono::steady_clock::now();
+
     while(true){
-      next_frame += std::chrono::milliseconds(1000/30); // 30 render per second
+      next_frame += period; // 30 render per second
 
       winMutex.lock();
       if(!win_.isOpen()) return;
@@ -72,7 +78,7 @@ namespace GUI {
         return;
       }else if (e.type == sf::Event::MouseButtonReleased
                 || e.type == sf::Event::TouchEnded){
-        if(!animated_){
+        if(!framerate_){
           winMutex.lock();
           render();
           winMutex.unlock();

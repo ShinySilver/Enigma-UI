@@ -78,11 +78,9 @@ namespace GUI {
         return;
       }else if (e.type == sf::Event::MouseButtonReleased
                 || e.type == sf::Event::TouchEnded){
-        if(!framerate_){
-          winMutex.lock();
-          render();
-          winMutex.unlock();
-        }
+        winMutex.lock();
+        render();
+        winMutex.unlock();
       }
       contentPaneMutex.lock();
       const std::vector<ActionListener *> *actionListeners;

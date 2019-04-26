@@ -1,8 +1,8 @@
 #include "testProtocol.hpp"
 #include "../Protocols/robot.h"
-#include "../AI/ia.hpp"
+#include "../IA/ia.hpp"
 
-void TestProtocol::update(IA *ia){ //execute the next action of this protocol
+void TestProtocol::update(){ //execute the next action of this protocol
   switch(state){
     case 0:
     //ia->mb->translate(500);
@@ -36,6 +36,6 @@ bool TestProtocol::isCompleted(){ //wether the last action of this protocol have
   return state>7;
 }
 
-unsigned short int TestProtocol::getPriority(IA *ia){
+unsigned short int TestProtocol::getPriority(){
   return priority;
 }

@@ -18,14 +18,14 @@
 
 #include "Utils/Settings.hpp"
 
-#define DEBUG 1
+#include "IA/ia.hpp"
 
 GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
 
 static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, 0.5);
 static GUI::Container *mainMenu = new GUI::Container();
 static GUI::Container *subMenu = new GUI::Container();
-
+static AI::IA *ia = 0;
 
 // Detection du starter. Sa compréhension n'est pas obligatoire ;)
 void starter() {
@@ -87,13 +87,7 @@ int main(void) {
   GUI::Button btn5 {"PanicMode: True", sf::Vector2f(400,210),sf::Vector2f(0,40)};
 
   GUI::Label label2 {"Starter & Supervision:", sf::Vector2f(400,280)};
-  std::string (*updater2)()  = []() -> std::string {
-    if(Utils::Settings::getFlag("isStarted")){
-      return "State: Launched";
-    }else{
-      return (Utils::Settings::getFlag("isStarterReady")?"Starter: Ready ":"Starter: NOT READY");
-    }
-  };
+  std::string (*updater2)()  = []() -> std::string {if(Utils::Settings::getFlag("isStarted")){return "State: Launched";}else{return (Utils::Settings::getFlag("isStarterReady")?"Starter: Ready ":"Starter: NOT READY");}};
   GUI::Displayer display2 {updater2, sf::Vector2f(400,340),sf::Vector2f(0,40)};
 
   GUI::Button btn4 {">>", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
@@ -105,17 +99,26 @@ int main(void) {
   win->setContent(mainMenu);
 
   /**
-   * Init AI
+   * Init GPIO
    */
   #ifndef DESKTOP
-  wiringPiSetupGpio();
+  wiringPiSetupSys();
+  pinmode(STARTER,INPUT);
   #endif
+
+  /**
+   * Init AI
+   */
+  ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
   starter();
+  ia->enable();
 
   /**
    * Waiting for the window to close itself
    */
   win->join();
+  std::cout << "Window closed.\n";
+  ia->join();
   std::cout << "Normal end\n";
   return 0;
 }

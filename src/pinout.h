@@ -1,4 +1,4 @@
-#pragma #ifndef PINOUT_H
+#ifndef PINOUT_H
 #define PINOUT_H
 
 //##############################################//

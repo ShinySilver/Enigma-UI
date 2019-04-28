@@ -69,7 +69,7 @@ namespace AI{
     if(mainLoop_.joinable()){
       std::cout<<"Waiting for the AI to finish...\n";
       mainLoop_.join();
-      std::cout<<"AI stopped.\n";
+      std::cout<<"AI thread joined.\n";
     }
   }
 }

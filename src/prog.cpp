@@ -2,8 +2,8 @@
 #include <thread>
 #include <iostream>
 
-#define DESKTOP
-#ifndef DESKTOP
+//#define PI
+#ifdef PI
 #include <wiringPi.h>
 #endif
 
@@ -17,8 +17,11 @@
 #include "GUI/Label.hpp"
 
 #include "Utils/Settings.hpp"
+#include "Utils/Starter.hpp"
 
 #include "IA/ia.hpp"
+
+#include "pinout.h"
 
 GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
 
@@ -26,32 +29,6 @@ static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, 0.5);
 static GUI::Container *mainMenu = new GUI::Container();
 static GUI::Container *subMenu = new GUI::Container();
 static AI::IA *ia = 0;
-
-// Detection du starter. Sa compréhension n'est pas obligatoire ;)
-void starter() {
-  #ifndef DESKTOP
-  double tmp = 0;
-  bool hasStarterBeenInserted = false;
-  while (true) {
-    tmp = (double)(tmp * 99.0 + digitalRead(STARTER)) / 100.0;
-    if (!hasStarterBeenInserted && tmp >= 0.90) {
-      Utils::Settings::setFlag("isStarterReady",1);
-      Serial.println("Starter ready!");
-    }
-    if(hasStarterBeenInserted && tmp <= 0.10){
-      return;
-    }
-    delay(1);
-  }
-  #else
-  std::this_thread::sleep_for(std::chrono::seconds(5));
-  Utils::Settings::setFlag("isStarterReady",1);
-  std::cout<<"Starter inserted!\n";
-  std::this_thread::sleep_for(std::chrono::seconds(3));
-  Utils::Settings::setFlag("isStarted",1);
-  std::cout<<"Starter removed. Robot launched!\n";
-  #endif
-}
 
 int main(void) {
   /**
@@ -101,7 +78,7 @@ int main(void) {
   /**
    * Init GPIO
    */
-  #ifndef DESKTOP
+  #ifdef PI
   wiringPiSetupSys();
   pinmode(STARTER,INPUT);
   #endif
@@ -110,7 +87,7 @@ int main(void) {
    * Init AI
    */
   ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
-  starter();
+  Utils::starter(STARTER);
   ia->enable();
 
   /**

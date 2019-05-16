@@ -10,11 +10,13 @@ namespace Utils{
     public:
       static void setFlag(std::string flagName, unsigned char value);
       static short int getFlag(std::string flagName);
+      static void setUpdateCallback(void (*callback)());
       typedef struct {
         std::string id;
         unsigned char value;
       } DictionnaryEntry;
     private:
+      static void (*cb_)();
       static std::vector<DictionnaryEntry> dictionnary;
       static std::mutex dictionnaryMutex;
   };

@@ -25,7 +25,7 @@
 
 GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
 
-static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, 0.5);
+static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, -1);
 static GUI::Container *mainMenu = new GUI::Container();
 static GUI::Container *subMenu = new GUI::Container();
 static AI::IA *ia = 0;
@@ -44,7 +44,7 @@ int main(void) {
   Utils::Settings::setFlag("maxPwm",0);
   Utils::Settings::setFlag("isStarterReady",0);
   Utils::Settings::setFlag("isStarted",0);
-
+  Utils::Settings::setUpdateCallback([](){win->render();});
 
   /**
    * Init main menu
@@ -86,6 +86,7 @@ int main(void) {
   /**
    * Init AI
    */
+  std::cout<<"Pour l'instant tout est ok...\n";
   ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
   Utils::starter(STARTER);
   ia->enable();

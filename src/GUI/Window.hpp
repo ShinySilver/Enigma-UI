@@ -38,9 +38,10 @@ namespace GUI {
       void join();
       void close();
 
+      void render();
+
     private :
       void handleEvent();
-      void render();
       void renderLoop();
 
       sf::RenderWindow win_;

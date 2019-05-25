@@ -4,10 +4,10 @@
 #include "protocol.hpp"
 
 #include <thread>
+#include <mutex>
 #include <atomic>
 #include <chrono>
-
-#define MAX_PROTOCOL_NUMBER 15
+#include <vector>
 
 #define PRIORITY_HIGHEST 6
 #define PRIORITY_VERY_HIGH 5
@@ -36,13 +36,27 @@ namespace AI{
       void enable();
       void disable();
 
+      /**
+       * Forcage du protocole courant
+       */
+      int getProtocolCount();
+      int getCurrentProtocolId();
+      void forceCurrentProtocol(int protocolId);
+
+      /**
+       * De quoi reset l'ia / les protocoles
+       */
+      //void restart();
+      void reset(int protocolId);
+
       void join();
 
     private:
-      Protocol *protocols_[MAX_PROTOCOL_NUMBER];
-      unsigned short int protocolCount_;
-      short int selectedProtocolId_=-1;
-      std::atomic_bool disabled_, enabled_;
+      std::vector<Protocol *> protocols_;
+      std::atomic_int protocolCount_;
+      std::atomic_int selectedProtocolId_ = -1;
+      std::mutex protocolIdMutex_;
+      std::atomic_bool disabled_, enabled_, forced_;
 
       void (*onEnable_)();
       void (*onDisable_)();

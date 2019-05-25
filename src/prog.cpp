@@ -20,6 +20,7 @@
 #include "Utils/Starter.hpp"
 
 #include "IA/ia.hpp"
+#include "Protocols/testProtocol.hpp"
 
 #include "pinout.h"
 
@@ -27,7 +28,8 @@ GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addCompone
 
 static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, -1);
 static GUI::Container *mainMenu = new GUI::Container();
-static GUI::Container *subMenu = new GUI::Container();
+static GUI::Container *automaticModeMenu = new GUI::Container();
+static GUI::Container *semiAutoModeMenu = new GUI::Container();
 static AI::IA *ia = 0;
 
 int main(void) {
@@ -44,31 +46,69 @@ int main(void) {
   Utils::Settings::setFlag("maxPwm",0);
   Utils::Settings::setFlag("isStarterReady",0);
   Utils::Settings::setFlag("isStarted",0);
+  Utils::Settings::setFlag("protocolSelector",-1);
   Utils::Settings::setUpdateCallback([](){win->render();});
+
+  /**
+   * Init AI
+   */
+  ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
+  ia->addProtocol(new TestProtocol(1, "Ceci est un message envoyé par le protocole 1\n"));
+  ia->addProtocol(new TestProtocol(3, "Ceci est un message envoyé par le protocole 2\n"));
 
   /**
    * Init main menu
    */
-  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,40), [](){win->setContent(subMenu);}};
-  GUI::Button btn2 {"Mode protocole", sf::Vector2f(400,280),sf::Vector2f(0,40)};
+  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,40), [](){win->setContent(automaticModeMenu);}};
+  GUI::Button btn2 {"Mode protocole", sf::Vector2f(400,280),sf::Vector2f(0,40), [](){win->setContent(semiAutoModeMenu);}};
   GUI::Button btn3 {"Mode manuel", sf::Vector2f(400,340),sf::Vector2f(0,40)};
   *mainMenu<<bgImg<<title<<&btn1<<&btn2<<&btn3;
 
-
   /**
-   * Init submenu
+   * Init automaticModeMenu
    */
   GUI::Label label1 {"Parametrage:", sf::Vector2f(400,100)};
   std::string (*updater1)()  = []() -> std::string {return (Utils::Settings::getFlag("isLeftSide")?"Side: Left ":"Side: Right");};
   GUI::Displayer display1 {updater1, sf::Vector2f(400,160),sf::Vector2f(0,40),[](){Utils::Settings::setFlag("isLeftSide",!Utils::Settings::getFlag("isLeftSide"));}};
   GUI::Button btn5 {"PanicMode: True", sf::Vector2f(400,210),sf::Vector2f(0,40)};
-
   GUI::Label label2 {"Starter & Supervision:", sf::Vector2f(400,280)};
   std::string (*updater2)()  = []() -> std::string {if(Utils::Settings::getFlag("isStarted")){return "State: Launched";}else{return (Utils::Settings::getFlag("isStarterReady")?"Starter: Ready ":"Starter: NOT READY");}};
   GUI::Displayer display2 {updater2, sf::Vector2f(400,340),sf::Vector2f(0,40)};
-
   GUI::Button btn4 {">>", sf::Vector2f(735,50),sf::Vector2f(90,48), [](){win->setContent(mainMenu);}};
-  *subMenu<<bgImg<<&btn4<<&btn5<<&display1<<&label1<<&label2<<&display2;
+  *automaticModeMenu<<bgImg<<&btn4<<&btn5<<&display1<<&label1<<&label2<<&display2;
+
+
+  /**
+   * Init semiAutoModeMenu
+   *///*
+  GUI::Label label3 {"Selection protocole:", sf::Vector2f(400,100)};
+  std::string (*updater3)()  = []() -> std::string {return "Courant: #"+std::to_string(Utils::Settings::getFlag("protocolSelector"));};
+  GUI::Displayer display3 {updater3, sf::Vector2f(400,200),sf::Vector2f(0,40)};
+  GUI::Button btn7 {"Executer", sf::Vector2f(400,250),sf::Vector2f(0,40), [](){ia->forceCurrentProtocol(Utils::Settings::getFlag("protocolSelector"));}};
+  GUI::Button btn6 {"<<", sf::Vector2f(310,250),sf::Vector2f(0,40), [](){
+      char s = (char)(Utils::Settings::getFlag("protocolSelector")-1);
+      if(s<-1){
+          s=(char)ia->getProtocolCount();
+      }else if(s>=ia->getProtocolCount()){
+          std::cout<<"AH "<<s<<"\n";
+          s=-1;
+      }
+      std::cout<<"blblblb "<<s<<"\n";
+      Utils::Settings::setFlag("protocolSelector", (unsigned char)s);
+  }};
+  GUI::Button btn8 {">>", sf::Vector2f(490,250),sf::Vector2f(0,40), [](){
+      char s = (char)(Utils::Settings::getFlag("protocolSelector")+1);
+      if(s<-1){
+          s=(char)ia->getProtocolCount();
+      }else if(s>=ia->getProtocolCount()){
+          std::cout<<"AH "<<s<<"\n";
+          s=-1;
+      }
+      std::cout<<"blblblb "<<s<<"\n";
+      Utils::Settings::setFlag("protocolSelector", (unsigned char)s);
+  }};
+ GUI::Label label4 {"NB: Starter requis pour l'execution", sf::Vector2f(400,370)};
+  *semiAutoModeMenu<<bgImg<<&label3<<&display3<<&btn4<<&btn6<<&btn7<<&btn8<<&label4;//*/
 
   /**
    * Init Window
@@ -84,10 +124,9 @@ int main(void) {
   #endif
 
   /**
-   * Init AI
+   * Début du match
    */
   std::cout<<"Pour l'instant tout est ok...\n";
-  ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
   Utils::starter(STARTER);
   ia->enable();
 

@@ -8,12 +8,12 @@
 namespace Utils{
   class Settings{ // static class. Yeah.
     public:
-      static void setFlag(std::string flagName, unsigned char value);
-      static short int getFlag(std::string flagName);
+      static void setFlag(std::string flagName, char value);
+      static char getFlag(std::string flagName);
       static void setUpdateCallback(void (*callback)());
       typedef struct {
         std::string id;
-        unsigned char value;
+        char value;
       } DictionnaryEntry;
     private:
       static void (*cb_)();

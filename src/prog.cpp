@@ -90,10 +90,8 @@ int main(void) {
       if(s<-1){
           s=(char)ia->getProtocolCount();
       }else if(s>=ia->getProtocolCount()){
-          std::cout<<"AH "<<s<<"\n";
           s=-1;
       }
-      std::cout<<"blblblb "<<s<<"\n";
       Utils::Settings::setFlag("protocolSelector", (unsigned char)s);
   }};
   GUI::Button btn8 {">>", sf::Vector2f(490,250),sf::Vector2f(0,40), [](){
@@ -101,10 +99,8 @@ int main(void) {
       if(s<-1){
           s=(char)ia->getProtocolCount();
       }else if(s>=ia->getProtocolCount()){
-          std::cout<<"AH "<<s<<"\n";
           s=-1;
       }
-      std::cout<<"blblblb "<<s<<"\n";
       Utils::Settings::setFlag("protocolSelector", (unsigned char)s);
   }};
  GUI::Label label4 {"NB: Starter requis pour l'execution", sf::Vector2f(400,370)};

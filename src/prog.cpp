@@ -59,10 +59,9 @@ int main(void) {
   /**
    * Init main menu
    */
-  GUI::Button btn1 {"Mode match", sf::Vector2f(400,220),sf::Vector2f(0,40), [](){win->setContent(automaticModeMenu);}};
-  GUI::Button btn2 {"Mode protocole", sf::Vector2f(400,280),sf::Vector2f(0,40), [](){win->setContent(semiAutoModeMenu);}};
-  GUI::Button btn3 {"Mode manuel", sf::Vector2f(400,340),sf::Vector2f(0,40)};
-  *mainMenu<<bgImg<<title<<&btn1<<&btn2<<&btn3;
+  GUI::Button btn1 {"Mode match", sf::Vector2f(400,230),sf::Vector2f(0,40), [](){win->setContent(automaticModeMenu);}};
+  GUI::Button btn2 {"Mode manuel", sf::Vector2f(400,290),sf::Vector2f(0,40), [](){win->setContent(semiAutoModeMenu);}};
+  *mainMenu<<bgImg<<title<<&btn1<<&btn2;
 
   /**
    * Init automaticModeMenu

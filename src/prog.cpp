@@ -24,6 +24,9 @@
 
 #include "Serial/SerialControl.hpp"
 
+#include "sensorUtil.hpp"
+#include "asservUtil.hpp"
+
 #include "pinout.h"
 
 GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
@@ -130,11 +133,15 @@ int main(void) {
    * Initialisation des callbacks des modules
    */
   for(const auto &elem: modules) {
-    std::cout << elem->name << '\n';
     if(elem->name=="SensorBoard"){
-        std::cout<<"Callback du SensorBoard initialisé!\n";
-		std::cout << elem->sendCommand("activate;") << '\n';
-        elem->watch([](const std::string& str) { std::cout << str << '\n'; });
+        std::cout<<"SensorBoard connectée\n";
+        std::cout << elem->sendCommand("activate;") << '\n';
+        elem->watch(SensorUtil::cb);
+        //[](const std::string& str) { std::cout << str << '\n'; }
+    }else if(elem->name=="MotionBase"){
+        std::cout<<"MotionBase connectée\n";
+        AsservUtil::motionBase=elem;
+        elem->watch(AsservUtil::cb);
     }
   }
 

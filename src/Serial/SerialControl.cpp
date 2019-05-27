@@ -173,7 +173,7 @@ int update() {
 
 			std::string tmp;
 			if(n>0) tmp = std::string{data};
-			else if(!n) tmp = NO_RESPONSE;
+			else if(!n) continue;
 			else {
 				tmp = READ_FAIL;
 				ERROR_MSG("message to long from " << elem.name << '\n');

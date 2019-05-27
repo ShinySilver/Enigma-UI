@@ -14,6 +14,6 @@ class Protocol {
     virtual unsigned short int getPriority() = 0;
     inline void reset(){state_ = 0;}
   protected:
-    std::atomic_int state_ = 0;
+    std::atomic_int state_{0};
 };
 #endif

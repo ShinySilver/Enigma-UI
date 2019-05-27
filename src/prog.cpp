@@ -22,6 +22,8 @@
 #include "IA/ia.hpp"
 #include "Protocols/testProtocol.hpp"
 
+#include "Serial/SerialControl.hpp"
+
 #include "pinout.h"
 
 GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
@@ -31,6 +33,7 @@ static GUI::Container *mainMenu = new GUI::Container();
 static GUI::Container *automaticModeMenu = new GUI::Container();
 static GUI::Container *semiAutoModeMenu = new GUI::Container();
 static AI::IA *ia = 0;
+static std::atomic<bool> listenerEnabled{};
 
 int main(void) {
   /**
@@ -102,7 +105,7 @@ int main(void) {
       }
       Utils::Settings::setFlag("protocolSelector", (unsigned char)s);
   }};
- GUI::Label label4 {"NB: Starter requis pour l'execution", sf::Vector2f(400,370)};
+  GUI::Label label4 {"NB: Starter requis pour l'execution", sf::Vector2f(400,370)};
   *semiAutoModeMenu<<bgImg<<&label3<<&display3<<&btn4<<&btn6<<&btn7<<&btn8<<&label4;//*/
 
   /**
@@ -119,18 +122,56 @@ int main(void) {
   #endif
 
   /**
+   * Detection des périphériques
+   */
+  auto modules = SerialControl::listModules();
+
+  /**
+   * Initialisation des callbacks des modules
+   */
+  for(const auto &elem: modules) {
+    std::cout << elem->name << '\n';
+    if(elem->name=="SensorBoard"){
+        std::cout<<"Callback du SensorBoard initialisé!\n";
+		std::cout << elem->sendCommand("activate;") << '\n';
+        elem->watch([](const std::string& str) { std::cout << str << '\n'; });
+    }
+  }
+
+  /**
+   * On lance le thread d'update
+   */
+  listenerEnabled=false;
+  std::thread commandListener{[](){
+      while(!listenerEnabled) std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      while(listenerEnabled){
+          SerialControl::update();
+          std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      }
+  }};
+
+  /**
    * Début du match
    */
   std::cout<<"Pour l'instant tout est ok...\n";
   Utils::starter(STARTER);
   ia->enable();
+  listenerEnabled=true;
 
   /**
    * Waiting for the window to close itself
    */
   win->join();
-  std::cout << "Window closed.\n";
+  std::cout << "Window joined.\n";
   ia->join();
+  std::cout << "AI joined.\n";
+  if(commandListener.joinable()){
+      listenerEnabled=false;
+      commandListener.join();
+      std::cout<<"Serial joined!\n";
+  }else{
+      std::cout<<"Houston, nous avons un problème! Quelqu'un a réussi à faire crash le Serial!\n";
+  }
   std::cout << "Normal end\n";
   return 0;
 }

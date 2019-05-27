@@ -54,7 +54,7 @@ namespace AI{
     private:
       std::vector<Protocol *> protocols_;
       std::atomic_int protocolCount_;
-      std::atomic_int selectedProtocolId_ = -1;
+      std::atomic_int selectedProtocolId_{-1};
       std::mutex protocolIdMutex_;
       std::atomic_bool disabled_, enabled_, forced_;
 

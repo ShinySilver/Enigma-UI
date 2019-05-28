@@ -17,13 +17,13 @@ namespace AsservUtil{
 
     static inline void forward(int distance){
         if(motionBase){
-            motionBase->sendCommand("forward:"+std::to_string(distance));
+            motionBase->sendCommand("forward:"+std::to_string(distance)+";");
         }
     }
 
     static inline void rotate(double angle){
         if(motionBase){
-            motionBase->sendCommand("rotate:"+std::to_string(angle));
+            motionBase->sendCommand("rotate:"+std::to_string(angle)+";");
         }
     }
 
@@ -34,7 +34,7 @@ namespace AsservUtil{
                 command+=p.toString()+",";
             }
             command+=std::to_string(targetedAngle);
-            motionBase->sendCommand(command);
+            motionBase->sendCommand(command+";");
         }
     }
 

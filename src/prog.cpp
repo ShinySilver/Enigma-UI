@@ -59,8 +59,8 @@ int main(void) {
    * Init AI
    */
   ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
-  ia->addProtocol(new TestProtocol(1, "Ceci est un message envoyé par le protocole 1\n"));
-  ia->addProtocol(new TestProtocol(3, "Ceci est un message envoyé par le protocole 2\n"));
+  ia->addProtocol(new TestProtocol(1, 0, 0.0, "Ceci est un message envoyé par le protocole 1\n"));
+  ia->addProtocol(new TestProtocol(0, 100, 0.0, "Ceci est un message envoyé par le protocole 2\n"));
 
   /**
    * Init main menu

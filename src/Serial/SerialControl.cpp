@@ -182,7 +182,6 @@ int update() {
 			elem.callback(tmp);
 		}
 	}
-
 	return nbResp;
 }
 

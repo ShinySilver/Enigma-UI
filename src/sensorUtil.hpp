@@ -6,10 +6,9 @@
 
 namespace SensorUtil{
 
-    namespace{
-        bool enabledSensors[SENSOR_COUNT]{false};
-        std::mutex sensorsMutex{};
-    }
+
+    bool enabledSensors[SENSOR_COUNT]{false};
+    std::mutex sensorsMutex{};
 
     // TODO enable disable
 

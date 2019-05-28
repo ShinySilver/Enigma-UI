@@ -3,61 +3,70 @@
 
 #include "Serial/SerialControl.hpp"
 
-typedef struct {
-    double x,y;
-    std::string toString(){
-        return std::to_string(x)+'~'+std::to_string(y);
-    }
-} Point;
+class Point {
 
-namespace AsservUtil{
+    public :
+        double x,y;
 
-    namespace {
-        std::atomic_bool isBusy;
-        SerialControl::Module *motionBase;
-    }
-
-    inline std::atomic_bool *getIsBusy(){return &isBusy;}
-
-    inline void setModule(SerialControl::Module *mb){motionBase=mb;}
-
-    inline void forward(int distance){
-        if(motionBase){
-            motionBase->sendCommand("forward:"+std::to_string(distance)+";");
-        }else{
-            std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
+        std::string toString(){
+            return std::to_string(x)+'~'+std::to_string(y);
         }
-    }
 
-    inline void rotate(double angle){
-        if(motionBase){
-            motionBase->sendCommand("rotate:"+std::to_string(angle)+";");
-        }else{
-            std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
-        }
-    }
+};
 
-    inline void move(std::vector<Point> checkpoints, double targetedAngle){
-        if(motionBase){
-            std::string command = "move:";
-            for(auto p:checkpoints){
-                command+=p.toString()+",";
-            }
-            command+=std::to_string(targetedAngle);
-            motionBase->sendCommand(command+";");
-        }else{
-            std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
-        }
-    }
+namespace AsservUtil {
 
-    inline void cb(const std::string& str){
-        if(str=="movementFinished"){
-            std::cout<<"MotionBase is now idle\n";
-            isBusy=false;
-        }else{
-            std::cout<<"Unrecognized command: "<<str<<'\n';
-        }
+namespace {
+
+    std::atomic_bool isBusy_;
+    SerialControl::Module *motionBase_;
+
+}
+
+inline std::atomic_bool *getIsBusy(){
+    return &isBusy_;
+}
+
+inline void registerMotionBaseSerial(SerialControl::Module *module){
+    motionBase_=module;
+    motionBase_->watch([](const std::string& str){if(str=="movementFinished"){
+        std::cout<<"MotionBase is now idle\n";
+        isBusy_=false;
+    }else{
+        std::cout<<"Unrecognized command: "<<str<<'\n';
+    }});
+}
+
+inline void forward(int distance){
+    if(motionBase_){
+        motionBase_->sendCommand("forward:"+std::to_string(distance)+";");
+    }else{
+        std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
     }
 }
+
+inline void rotate(double angle){
+    if(motionBase_){
+        motionBase_->sendCommand("rotate:"+std::to_string(angle)+";");
+    }else{
+        std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
+    }
+}
+
+inline void move(std::vector<Point> checkpoints, double targetedAngle){
+    if(motionBase_){
+        std::string command = "move:";
+        for(auto p:checkpoints){
+            command+=p.toString()+",";
+        }
+        command+=std::to_string(targetedAngle);
+        motionBase_->sendCommand(command+";");
+    }else{
+        std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
+    }
+}
+
+} //namespace asservUtil
+
 
 #endif

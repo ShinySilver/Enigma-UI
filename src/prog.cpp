@@ -29,13 +29,20 @@
 
 #include "pinout.h"
 
-GUI::Container& operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
+GUI::Container &operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
 
+/**
+ * Interface
+ */
 static GUI::Window *win = new GUI::Window("ENIgma UI", 800.0,480.0, -1);
 static GUI::Container *mainMenu = new GUI::Container();
 static GUI::Container *automaticModeMenu = new GUI::Container();
 static GUI::Container *semiAutoModeMenu = new GUI::Container();
 static AI::IA *ia = 0;
+
+/**
+ * Le serial et les modules
+ */
 static std::atomic<bool> listenerEnabled{};
 
 int main(void) {
@@ -140,8 +147,7 @@ int main(void) {
         //[](const std::string& str) { std::cout << str << '\n'; }
     }else if(elem->name=="MotionBase"){
         std::cout<<"MotionBase connectée\n";
-        AsservUtil::motionBase=elem;
-        elem->watch(AsservUtil::cb);
+        AsservUtil::registerMotionBaseSerial(elem);
     }
   }
 

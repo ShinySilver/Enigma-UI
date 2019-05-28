@@ -12,10 +12,16 @@ typedef struct {
 
 namespace AsservUtil{
 
-    static std::atomic_bool isBusy{false};
-    static SerialControl::Module *motionBase{0};
+    namespace {
+        std::atomic_bool isBusy;
+        SerialControl::Module *motionBase;
+    }
 
-    static inline void forward(int distance){
+    inline std::atomic_bool *getIsBusy(){return &isBusy;}
+
+    inline void setModule(SerialControl::Module *mb){motionBase=mb;}
+
+    inline void forward(int distance){
         if(motionBase){
             motionBase->sendCommand("forward:"+std::to_string(distance)+";");
         }else{
@@ -23,7 +29,7 @@ namespace AsservUtil{
         }
     }
 
-    static inline void rotate(double angle){
+    inline void rotate(double angle){
         if(motionBase){
             motionBase->sendCommand("rotate:"+std::to_string(angle)+";");
         }else{
@@ -31,7 +37,7 @@ namespace AsservUtil{
         }
     }
 
-    static inline void move(std::vector<Point> checkpoints, double targetedAngle){
+    inline void move(std::vector<Point> checkpoints, double targetedAngle){
         if(motionBase){
             std::string command = "move:";
             for(auto p:checkpoints){
@@ -44,7 +50,7 @@ namespace AsservUtil{
         }
     }
 
-    static inline void cb(const std::string& str){
+    inline void cb(const std::string& str){
         if(str=="movementFinished"){
             std::cout<<"MotionBase is now idle\n";
             isBusy=false;

@@ -151,13 +151,12 @@ int main(void) {
     if(elem->name=="SensorBoard"){
         std::cout<<"SensorBoard connectée\n";
         Utils::SensorUtil::instance()->setSerialModule(elem);
-        Utils::SensorUtil::instance()->disable();
+        Utils::SensorUtil::instance()->enable();
         elem->watch(Utils::SensorUtil::cb);
     }else if(elem->name=="MotionBase"){
         std::cout<<"MotionBase connectée\n";
-        std::cout << elem->sendCommand("activate;") << '\n';
         Utils::AsservUtil::instance()->setSerialModule(elem);
-        Utils::AsservUtil::instance()->disable();
+        Utils::AsservUtil::instance()->enable();
     }
   }
 

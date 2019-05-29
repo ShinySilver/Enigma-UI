@@ -16,13 +16,23 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
     Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
     Utils::AsservUtil::instance()->forward(translation_);
-    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
+    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100));
     break;
     case 2:
-    //ia->mb->translate(500);
+    Utils::AsservUtil::instance()->rotate(-PI/2);
+    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100));
     break;
     case 3:
-    //ia->mb->rotate(PI*(ia->getFlag("side")?1:-1));
+    Utils::AsservUtil::instance()->forward(translation_);
+    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    break;
+    case 4:
+    Utils::AsservUtil::instance()->rotate(-PI/2);
+    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    break;
+    case 5:
+    Utils::AsservUtil::instance()->forward(translation_);
+    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100));
     break;
     default:
     // Anomaly
@@ -32,7 +42,7 @@ void TestProtocol::update(){ //execute the next action of this protocol
 }
 
 bool TestProtocol::isCompleted(){ //wether the last action of this protocol have already been executed or not
-  return state_>3;
+  return state_>5||(translation_==0&&state_>1);
 }
 
 unsigned short int TestProtocol::getPriority(){

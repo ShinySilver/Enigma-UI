@@ -7,6 +7,8 @@ class IA;
 #include <vector>
 #include <atomic>
 
+#define PI (3.141592653589793238)
+
 class Protocol {
   public:
     virtual void update() = 0; //execute the next action of this protocol

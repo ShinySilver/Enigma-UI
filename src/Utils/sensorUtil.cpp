@@ -3,6 +3,7 @@
 Utils::SensorUtil *Utils::SensorUtil::instance_=0;
 
 void Utils::SensorUtil::cb(const std::string& str){
+    std::cout<<"sensor #"<<(int)str[0]<<" passe à "<<(int)str[2]<<"\n";
     if((int)str[0]>= 0 && (int)str[0]<SENSOR_COUNT){
         instance()->sensorMutex.lock();
         if(instance_->enabledSensors[(int)str[0]]){

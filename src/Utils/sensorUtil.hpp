@@ -23,7 +23,10 @@ namespace Utils{
     public:
         static SensorUtil *instance();
 
-        inline void setSerialModule(SerialControl::Module *module){module_=module;}
+        inline void setSerialModule(SerialControl::Module *module){
+            module_=module;
+            module_->watch(this->cb);
+        }
         static void cb(const std::string& str);
         inline void reset(){for(int i=0;i<SENSOR_COUNT;i++)enabledSensors[i]=false;activeSensorsNum=0;}
         void enableSensor(int id);

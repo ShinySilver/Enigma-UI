@@ -5,7 +5,7 @@
 
 namespace Utils{
   void starter(int pin) {
-    #ifdef PI
+    #ifdef RPI
     double tmp = 0;
     bool hasStarterBeenInserted = false;
     while (true) {

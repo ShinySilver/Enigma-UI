@@ -2,8 +2,8 @@
 #include <thread>
 #include <iostream>
 
-//#define PI
-#ifdef PI
+//#define RPI
+#ifdef RPI
 #include <wiringPi.h>
 #else
 #include "Utils/Starter.hpp"
@@ -133,7 +133,7 @@ int main(void) {
   /**
    * Init GPIO
    */
-  #ifdef PI
+  #ifdef RPI
   wiringPiSetupGpio();
   pinMode(LED_1,OUTPUT);
   pinMode(LED_2,OUTPUT);
@@ -181,7 +181,7 @@ int main(void) {
    * Début du match
    */
   std::cout<<"Pour l'instant tout est ok...\n";
-  #ifndef PI
+  #ifndef RPI
   Utils::starter(STARTER);
   #else
   while(digitalRead(STARTER));

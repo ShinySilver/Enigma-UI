@@ -138,7 +138,7 @@ int main(void) {
   pinMode(LED_2,OUTPUT);
   pinMode(LED_3,OUTPUT);
   pinMode(SIDE,INPUT);
-  pinmode(STARTER,INPUT);
+  pinMode(STARTER,INPUT);
   #endif
 
   /**

@@ -61,7 +61,7 @@ int main(void) {
   Utils::Settings::setFlag("isStarterReady",0);
   Utils::Settings::setFlag("isStarted",0);
   Utils::Settings::setFlag("protocolSelector",-1);
-  Utils::Settings::setUpdateCallback([](){win->render();});
+  Utils::Settings::setUpdateCallback([](){std::cout<<"ARGBLBLB\n";win->render();});
 
   /**
    * Init AI

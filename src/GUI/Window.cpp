@@ -82,10 +82,14 @@ namespace GUI {
       if (e.type == sf::Event::Closed){
         close();
         return;
-      }/*else if (e.type == sf::Event::MouseButtonReleased
+      }else if (e.type == sf::Event::MouseButtonReleased
                 || e.type == sf::Event::TouchEnded){
-        render();
-      }*/
+            auto now = std::chrono::steady_clock::now();
+            if(lastClick_-now<std::chrono::milliseconds(500)){
+                render();
+            }
+            lastClick_=now;
+      }
       contentPaneMutex.lock();
       const std::vector<ActionListener *> *actionListeners;
       if(contentPane_){

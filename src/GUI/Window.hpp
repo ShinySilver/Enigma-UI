@@ -5,6 +5,7 @@
 #include <tuple>
 #include <atomic>
 #include <mutex>
+#include <chrono>
 
 #include "SFML/Graphics.hpp"
 
@@ -20,6 +21,7 @@ namespace GUI {
                                                           contentPaneMutex{},
                                                           bgColor_{bgColor},
                                                           framerate_{framerate},
+                                                          lastClick_{std::chrono::steady_clock::now()},
                                                           eventHandler_{&Window::handleEvent, this},
                                                           renderer_{&Window::renderLoop, this}
       {
@@ -53,8 +55,10 @@ namespace GUI {
       sf::Color bgColor_;
 
       std::atomic<double> framerate_;
+      std::chrono::steady_clock::time_point lastClick_;
       std::thread eventHandler_;
       std::thread renderer_;
+
   };
 }
 

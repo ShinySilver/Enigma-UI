@@ -11,12 +11,13 @@ namespace Utils{
     while (true) {
       tmp = (double)(tmp * 95.0 + digitalRead(pin)) / 100.0;
       if (!hasStarterBeenInserted && tmp >= 0.90) {
+      std::cout<<"Starter inserted!\n";
         Utils::Settings::setFlag("isStarterReady",1);
       }
       if(hasStarterBeenInserted && tmp <= 0.10){
         return;
       }
-      delay(1);
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     #else
     (void)pin;
@@ -25,7 +26,7 @@ namespace Utils{
     std::cout<<"Starter inserted!\n";
     std::this_thread::sleep_for(std::chrono::seconds(3));
     Utils::Settings::setFlag("isStarted",1);
-    std::cout<<"Starter removed. Robot launched!\n";
     #endif
+    std::cout<<"Starter removed. Robot launched!\n";
   }
 }

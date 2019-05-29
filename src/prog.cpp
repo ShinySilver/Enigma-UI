@@ -27,7 +27,7 @@
 #include "Utils/sensorUtil.hpp"
 #include "Utils/asservUtil.hpp"
 
-#include "pinout.h"
+#include "pinout.hpp"
 
 GUI::Container &operator<<(GUI::Container &c1, GUI::Component *c2){c1.addComponent(c2);return c1;}
 
@@ -133,7 +133,11 @@ int main(void) {
    * Init GPIO
    */
   #ifdef PI
-  wiringPiSetupSys();
+  wiringPiSetupGpio();
+  pinMode(LED_1,OUTPUT);
+  pinMode(LED_2,OUTPUT);
+  pinMode(LED_3,OUTPUT);
+  pinMode(SIDE,INPUT);
   pinmode(STARTER,INPUT);
   #endif
 

@@ -5,6 +5,8 @@
 #define PI
 #ifdef PI
 #include <wiringPi.h>
+#else
+#include "Utils/Starter.hpp"
 #endif
 
 #include "SFML/Graphics/Color.hpp"
@@ -17,7 +19,6 @@
 #include "GUI/Label.hpp"
 
 #include "Utils/Settings.hpp"
-#include "Utils/Starter.hpp"
 
 #include "IA/ia.hpp"
 #include "Protocols/testProtocol.hpp"

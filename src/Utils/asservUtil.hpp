@@ -39,7 +39,8 @@ namespace Utils{
             void forward(int distance);
             void rotate(double angle);
             void move(std::vector<Point> checkpoints, double targetedAngle);
-            void pause(bool pause);
+            void pause();
+            void resume();
         private:
             static AsservUtil *instance_;
             std::atomic_bool isBusy_;

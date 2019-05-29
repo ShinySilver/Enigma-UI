@@ -139,12 +139,13 @@ int main(void) {
   /**
    * Initialisation des callbacks des modules
    */
+  Utils::AsservUtil::instance();
+  Utils::SensorUtil::instance();
   for(const auto &elem: modules) {
     if(elem->name=="SensorBoard"){
         std::cout<<"SensorBoard connectée\n";
         std::cout << elem->sendCommand("activate;") << '\n';
-        elem->watch(SensorUtil::cb);
-        //[](const std::string& str) { std::cout << str << '\n'; }
+        elem->watch(Utils::SensorUtil::cb);
     }else if(elem->name=="MotionBase"){
         std::cout<<"MotionBase connectée\n";
         Utils::AsservUtil::instance()->setSerialModule(elem);

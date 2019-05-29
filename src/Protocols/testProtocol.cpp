@@ -3,6 +3,7 @@
 #include "../IA/ia.hpp"
 
 #include "../Utils/asservUtil.hpp"
+#include "../Utils/sensorUtil.hpp"
 
 void TestProtocol::update(){ //execute the next action of this protocol
   switch(state_){
@@ -10,6 +11,10 @@ void TestProtocol::update(){ //execute the next action of this protocol
     std::cout<<text_;
     break;
     case 1:
+    if(!translation_) break;
+    Utils::SensorUtil::instance()->reset();
+    Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
     Utils::AsservUtil::instance()->forward(translation_);
     break;
     case 2:

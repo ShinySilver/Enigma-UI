@@ -7,7 +7,9 @@ namespace Utils{
     AsservUtil *AsservUtil::instance(){
         if(!instance_){
             instance_ = new AsservUtil;
-            std::cout<<"creation d'une instance"<<'\n';
+            #ifdef DEBUG
+            std::cout << "Instance de AsservUtil créée\n";
+            #endif
         }
         return instance_;
     }
@@ -29,17 +31,23 @@ namespace Utils{
     void AsservUtil::forward(int distance){
         if(motionBase_){
             motionBase_->sendCommand("forward:"+std::to_string(distance)+";");
-        }else{
+        }
+        #ifdef DEBUG
+        else{
             std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
         }
+        #endif
     }
 
     void AsservUtil::rotate(double angle){
         if(motionBase_){
             motionBase_->sendCommand("rotate:"+std::to_string(angle)+";");
-        }else{
+        }
+        #ifdef DEBUG
+        else{
             std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
         }
+        #endif
     }
 
     void AsservUtil::move(std::vector<Point> checkpoints, double targetedAngle){
@@ -50,8 +58,33 @@ namespace Utils{
             }
             command+=std::to_string(targetedAngle);
             motionBase_->sendCommand(command+";");
-        }else{
+        }
+        #ifdef DEBUG
+        else{
             std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
         }
+        #endif
+    }
+
+    void AsservUtil::pause(){
+        if(motionBase_){
+            motionBase_->sendCommand("pause;");
+        }
+        #ifdef DEBUG
+        else{
+            std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
+        }
+        #endif
+    }
+
+    void AsservUtil::resume(){
+        if(motionBase_){
+            motionBase_->sendCommand("resume;");
+        }
+        #ifdef DEBUG
+        else{
+            std::cout<<"Une commande a été envoyée à la MotionBase alors que la lib n'était pas initialisée\n";
+        }
+        #endif
     }
 }

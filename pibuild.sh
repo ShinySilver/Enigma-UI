@@ -1,1 +1,1 @@
-make -C src LDFLAGS= -lwiringPi;
+make -C src LDFLAGS=' -lwiringPi';

@@ -2,7 +2,7 @@
 #include <thread>
 #include <iostream>
 
-//#define PI
+#define PI
 #ifdef PI
 #include <wiringPi.h>
 #endif
@@ -180,7 +180,17 @@ int main(void) {
    * Début du match
    */
   std::cout<<"Pour l'instant tout est ok...\n";
+  #ifndef PI
   Utils::starter(STARTER);
+  #else
+  while(digitalread(STARTER));
+  std::cout<<"Starter prêt\n";
+  Utils::Settings::setFlag("isStarterReady",1);
+  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  while(!digitalread(STARTER));
+  std::cout<<"Robot lancé\n";
+  Utils::Settings::setFlag("isStarted",1);
+  #endif
   ia->enable();
   listenerEnabled=true;
 

@@ -38,8 +38,8 @@ CPPFLAGS=
 CPPFLAGS+=-I ${SFMLDIR}/include
 #LDFLAGS=
 # LDFLAGS+=-L library/path -Wl,-rpath,library/path -l library_name
-LDFLAGS= -L ${SFMLDIR}/lib -Wl,-rpath,${SFMLDIR}/lib \
-         -lsfml-graphics -lsfml-window -lsfml-system -static-libasan
+LDFLAGS +=' -L ${SFMLDIR}/lib -Wl,-rpath,${SFMLDIR}/lib \
+         -lsfml-graphics -lsfml-window -lsfml-system -static-libasan'
 ifeq (${OS},Windows_NT)
   # nothing special for now
 else

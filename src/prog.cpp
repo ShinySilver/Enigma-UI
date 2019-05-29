@@ -65,7 +65,13 @@ int main(void) {
   /**
    * Init AI
    */
-  ia = new AI::IA([](){std::cout<<"AI stopped.\n";},[](){std::cout<<"AI started.\n";});
+  ia = new AI::IA([](){
+      Utils::AsservUtil::instance()->disable();
+      Utils::SensorUtil::instance()->disable();
+      std::cout<<"AI stopped.\n";
+  },[](){
+      std::cout<<"AI started.\n";
+  });
   ia->addProtocol(new TestProtocol(1, 0, 0.0, "Ceci est un message envoyé par le protocole 1\n"));
   ia->addProtocol(new TestProtocol(0, 100, 0.0, "Ceci est un message envoyé par le protocole 2\n"));
 
@@ -144,11 +150,14 @@ int main(void) {
   for(const auto &elem: modules) {
     if(elem->name=="SensorBoard"){
         std::cout<<"SensorBoard connectée\n";
-        std::cout << elem->sendCommand("activate;") << '\n';
+        Utils::SensorUtil::instance()->setSerialModule(elem);
+        Utils::SensorUtil::instance()->disable();
         elem->watch(Utils::SensorUtil::cb);
     }else if(elem->name=="MotionBase"){
         std::cout<<"MotionBase connectée\n";
+        std::cout << elem->sendCommand("activate;") << '\n';
         Utils::AsservUtil::instance()->setSerialModule(elem);
+        Utils::AsservUtil::instance()->disable();
     }
   }
 
@@ -179,6 +188,7 @@ int main(void) {
   std::cout << "Window joined.\n";
   ia->join();
   std::cout << "AI joined.\n";
+  Utils::SensorUtil::instance()->disable();
   if(commandListener.joinable()){
       listenerEnabled=false;
       commandListener.join();

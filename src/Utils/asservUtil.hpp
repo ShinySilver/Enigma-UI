@@ -41,6 +41,8 @@ namespace Utils{
             void move(std::vector<Point> checkpoints, double targetedAngle);
             void pause();
             void resume();
+            inline void disable(){motionBase_->sendCommand("deactivate;");}
+            inline void enable(){motionBase_->sendCommand("activate;");}
         private:
             static AsservUtil *instance_;
             std::atomic_bool isBusy_;

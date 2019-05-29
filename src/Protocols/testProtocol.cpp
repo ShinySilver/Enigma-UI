@@ -16,6 +16,7 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
     Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
     Utils::AsservUtil::instance()->forward(translation_);
+    while(Utils::AsservUtil::instance()->isBusy()) std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
     break;
     case 2:
     //ia->mb->translate(500);

@@ -2,7 +2,7 @@
 #include <thread>
 #include <iostream>
 
-#define PI
+//#define PI
 #ifdef PI
 #include <wiringPi.h>
 #else
@@ -61,7 +61,7 @@ int main(void) {
   Utils::Settings::setFlag("isStarterReady",0);
   Utils::Settings::setFlag("isStarted",0);
   Utils::Settings::setFlag("protocolSelector",-1);
-  Utils::Settings::setUpdateCallback([](){std::cout<<"ARGBLBLB\n";win->render();});
+  Utils::Settings::setUpdateCallback([](){win->render();});
 
   /**
    * Init AI

@@ -24,8 +24,8 @@
 
 #include "Serial/SerialControl.hpp"
 
-#include "sensorUtil.hpp"
-#include "asservUtil.hpp"
+#include "Utils/sensorUtil.hpp"
+#include "Utils/asservUtil.hpp"
 
 #include "pinout.h"
 
@@ -147,7 +147,7 @@ int main(void) {
         //[](const std::string& str) { std::cout << str << '\n'; }
     }else if(elem->name=="MotionBase"){
         std::cout<<"MotionBase connectée\n";
-        AsservUtil::registerMotionBaseSerial(elem);
+        Utils::AsservUtil::instance()->setSerialModule(elem);
     }
   }
 

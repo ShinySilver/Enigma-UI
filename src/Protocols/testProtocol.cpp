@@ -2,7 +2,7 @@
 #include "../Protocols/robot.h"
 #include "../IA/ia.hpp"
 
-#include "../asservUtil.hpp"
+#include "../Utils/asservUtil.hpp"
 
 void TestProtocol::update(){ //execute the next action of this protocol
   switch(state_){
@@ -10,7 +10,7 @@ void TestProtocol::update(){ //execute the next action of this protocol
     std::cout<<text_;
     break;
     case 1:
-    AsservUtil::forward(translation_);
+    Utils::AsservUtil::instance()->forward(translation_);
     break;
     case 2:
     //ia->mb->translate(500);
@@ -19,7 +19,7 @@ void TestProtocol::update(){ //execute the next action of this protocol
     //ia->mb->rotate(PI*(ia->getFlag("side")?1:-1));
     break;
     default:
-    // Anomality
+    // Anomaly
     break;
   }
   state_++;

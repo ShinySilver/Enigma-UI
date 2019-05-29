@@ -184,11 +184,11 @@ int main(void) {
   #ifndef PI
   Utils::starter(STARTER);
   #else
-  while(digitalread(STARTER));
+  while(digitalRead(STARTER));
   std::cout<<"Starter prêt\n";
   Utils::Settings::setFlag("isStarterReady",1);
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-  while(!digitalread(STARTER));
+  while(!digitalRead(STARTER));
   std::cout<<"Robot lancé\n";
   Utils::Settings::setFlag("isStarted",1);
   #endif

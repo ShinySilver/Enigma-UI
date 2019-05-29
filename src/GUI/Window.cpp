@@ -85,7 +85,7 @@ namespace GUI {
       }else if (e.type == sf::Event::MouseButtonReleased
                 || e.type == sf::Event::TouchEnded){
             auto now = std::chrono::steady_clock::now();
-            if(lastClick_-now<std::chrono::milliseconds(500)){
+            if(now-lastClick_<std::chrono::milliseconds(500)){
                 std::cout << "Double clic détecté: refresh de l'ecran\n";
                 render();
             }

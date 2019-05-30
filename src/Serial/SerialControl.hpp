@@ -43,19 +43,19 @@ class Module {
 	std::string name;
 
 	Module(const std::string name, const int fd, const struct termios oldAttr):
-		name{name}, moduleMutex_{}, fileDescriptor{fd}, oldAttr{oldAttr} {}
+		name{name}, fileDescriptor{fd}, oldAttr{oldAttr} {}
 
 	/**
 	 * send a command to the device and check for a response
 	 */
-	std::string sendCommand(const std::string& cmd) const;
+	std::string sendCommand(const std::string& cmd);
 	/**
 	 * set a lambda function that will be called in the update function when the device emit a message
 	 */
 	int watch(void callback(const std::string& cmd));
 
 	private:
-	std::mutex *moduleMutex_;
+	std::mutex moduleMutex_{};
 	int fileDescriptor;
 	struct termios oldAttr;
 	std::function<void(std::string&)> callback;
@@ -72,7 +72,7 @@ class Module {
 
 namespace {
 
-	std::list<Module> moduleList;
+	std::list<Module *> moduleList;
 
 }
 

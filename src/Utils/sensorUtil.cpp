@@ -42,9 +42,7 @@ void Utils::SensorUtil::reset() {
            instance_->sensorValues[i] = false;
     }
     instance_->activeSensorsNum = 0;
-    std::cout<<"AH\n";
-    instance_->module_->sendCommand("dsensors;");
-    std::cout<<"OH\n";
+    if(instance_->module_) instance_->module_->sendCommand("dsensors;");
     instance_->sensorMutex.unlock();
 }
 

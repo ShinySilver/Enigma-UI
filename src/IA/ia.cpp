@@ -55,14 +55,14 @@ namespace AI{
       protocolIdMutex_.lock();
       if(isBusy_()){
           std::this_thread::sleep_for(std::chrono::milliseconds(10));
-          continue;
+      }else{
+          if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {
+            autoselectProtocol();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Plus de stabilité
+          }
+          if(selectedProtocolId_!=-1) protocols_[selectedProtocolId_]->update();
+          protocolIdMutex_.unlock();
       }
-      if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {
-        autoselectProtocol();
-        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Plus de stabilité
-      }
-      if(selectedProtocolId_!=-1) protocols_[selectedProtocolId_]->update();
-      protocolIdMutex_.unlock();
     }
     if(onDisable_) onDisable_(); // Un callback pour couper les actionneurs
   }

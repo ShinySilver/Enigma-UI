@@ -57,7 +57,7 @@ namespace AI{
       protocolIdMutex_.lock();
       if(isBusy_()){
           std::cout<<"MB busy\n";
-          std::this_thread::sleep_for(std::chrono::milliseconds(10));
+          std::this_thread::sleep_for(std::chrono::milliseconds(100));
       }else{
           std::cout<<"MB pas busy\n";
           if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {

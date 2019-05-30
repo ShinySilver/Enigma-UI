@@ -47,7 +47,7 @@ void Utils::SensorUtil::reset() {
 }
 
 Utils::SensorUtil *Utils::SensorUtil::instance(){
-    if(!instance()){
+    if(!instance_){
         instance_ = new SensorUtil;
         #ifdef DEBUG
         std::cout << "Instance de SensorUtil créée\n";

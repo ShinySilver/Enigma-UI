@@ -22,7 +22,9 @@ namespace Utils{
     void AsservUtil::cb(const std::string& str){
         if(str=="movementFinished"){
             std::cout<<"MotionBase is now idle\n";
+            instance()->bMutex.lock();
             instance()->isBusy_=false;
+            instance()->bMutex.unlock();
         }else{
             std::cout<<"Unrecognized command: "<<str<<'\n';
         }
@@ -30,7 +32,9 @@ namespace Utils{
 
     void AsservUtil::forward(int distance){
         if(motionBase_){
+            instance()->bMutex.lock();
             instance()->isBusy_=true;
+            instance()->bMutex.unlock();
             motionBase_->sendCommand("forward:"+std::to_string(distance)+";");
         }
         #ifdef DEBUG
@@ -42,7 +46,9 @@ namespace Utils{
 
     void AsservUtil::rotate(double angle){
         if(motionBase_){
+            instance()->bMutex.lock();
             instance()->isBusy_=true;
+            instance()->bMutex.unlock();
             motionBase_->sendCommand("rotate:"+std::to_string(angle)+";");
         }
         #ifdef DEBUG
@@ -59,7 +65,9 @@ namespace Utils{
                 command+=p.toString()+",";
             }
             command+=std::to_string(targetedAngle);
+            instance()->bMutex.lock();
             instance()->isBusy_=true;
+            instance()->bMutex.unlock();
             motionBase_->sendCommand(command+";");
         }
         #ifdef DEBUG

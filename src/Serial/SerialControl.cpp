@@ -57,9 +57,9 @@ int readMessage(int fd, char* data) {
 //----Module functions
 
 std::string
-Module::sendCommand(const std::string& cmd) const{
+Module::sendCommand(const std::string& cmd){
 
-	moduleMutex_->lock();
+	moduleMutex_.lock();
 
 	//TODO add support for commands longer than MAX_MESSAGE_SIZE
 	const ssize_t size = cmd.size();
@@ -71,7 +71,7 @@ Module::sendCommand(const std::string& cmd) const{
 	DEBUG_MSG("sending to " << this->name << " : " << cmd);
 	if(i == WRITE_TRY_NB) {
 		ERROR_MSG("could not write message to " << this->name);
-		moduleMutex_->unlock();
+		moduleMutex_.unlock();
 		return WRITE_FAIL;
 	}
 
@@ -81,16 +81,16 @@ Module::sendCommand(const std::string& cmd) const{
 	if(n>0) { return std::string{data}; }
 	if(!n) { return std::string{NO_RESPONSE}; }
 	DEBUG_MSG("ccould not get message from " << this->name);
-	moduleMutex_->unlock();
+	moduleMutex_.unlock();
 	return READ_FAIL;
 }
 
 
 int
 Module::watch(void callback(const std::string& cmd)) {
-	moduleMutex_->lock();
+	moduleMutex_.lock();
 	this->callback = callback;
-	moduleMutex_->unlock();
+	moduleMutex_.unlock();
 	return 0;
 }
 
@@ -162,9 +162,8 @@ std::vector<Module*> listModules(){
 			}
 
 			DEBUG_MSG("whois : " << data);
-			Module module{data,fd,oldAttr};
-			moduleList.emplace_back(std::move(module));	//store the module in a list
-			modules.emplace_back(&moduleList.back());	//get the module adress (moving adress issues ?)
+			moduleList.emplace_back(new Module(data,fd,oldAttr));	//store the module in a list
+			modules.emplace_back(moduleList.back());	//get the module adress (moving adress issues ?)
 
 		}
 
@@ -181,19 +180,19 @@ int update() {
 	int nbResp = 0;
 
 	for(const auto &elem: moduleList) {
-		if(elem.callback) {
+		if(elem->callback) {
 			char data[MAX_MESSAGE_SIZE];
-			const int n = readMessage(elem.fileDescriptor,data);
+			const int n = readMessage(elem->fileDescriptor,data);
 
 			std::string tmp;
 			if(n>0) tmp = std::string{data};
 			else if(!n) continue;
 			else {
 				tmp = READ_FAIL;
-				ERROR_MSG("message to long from " << elem.name);
+				ERROR_MSG("message to long from " << elem->name);
 			}
-			DEBUG_MSG("from " << elem.name << " : " << tmp);
-			elem.callback(tmp);
+			DEBUG_MSG("from " << elem->name << " : " << tmp);
+			elem->callback(tmp);
 		}
 	}
 

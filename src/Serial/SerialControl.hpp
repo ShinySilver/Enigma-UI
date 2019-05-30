@@ -43,7 +43,7 @@ class Module {
 	std::string name;
 
 	Module(const std::string name, const int fd, const struct termios oldAttr):
-		name{name}/*, moduleMutex_{}*/, fileDescriptor{fd}, oldAttr{oldAttr} {}
+		name{name}, moduleMutex_{}, fileDescriptor{fd}, oldAttr{oldAttr} {}
 
 	/**
 	 * send a command to the device and check for a response
@@ -55,7 +55,7 @@ class Module {
 	int watch(void callback(const std::string& cmd));
 
 	private:
-	mutable std::mutex *moduleMutex_{};
+	std::mutex *moduleMutex_;
 	int fileDescriptor;
 	struct termios oldAttr;
 	std::function<void(std::string&)> callback;

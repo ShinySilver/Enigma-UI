@@ -56,8 +56,7 @@ int readMessage(int fd, char* data) {
 
 //----Module functions
 
-std::string
-Module::sendCommand(const std::string& cmd){
+std::string Module::sendCommand(const std::string& cmd){
 
 	moduleMutex_.lock();
 

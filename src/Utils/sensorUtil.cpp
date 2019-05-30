@@ -38,11 +38,13 @@ void Utils::SensorUtil::enableSensor(int id){
 void Utils::SensorUtil::reset() {
     instance()->sensorMutex.lock();
     for(int i=0; i<SENSOR_COUNT; i++) {
-	instance_->enabledSensors[i] = false;
-    instance_->sensorValues[i] = false;
+	       instance_->enabledSensors[i] = false;
+           instance_->sensorValues[i] = false;
     }
     instance_->activeSensorsNum = 0;
+    std::cout<<"AH\n";
     instance_->module_->sendCommand("dsensors;");
+    std::cout<<"OH\n";
     instance_->sensorMutex.unlock();
 }
 

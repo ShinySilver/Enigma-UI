@@ -16,7 +16,11 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::SensorUtil::instance()->reset();
     Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
     Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
-    Utils::AsservUtil::instance()->forward(300);
+    Utils::SensorUtil::instance()->enableSensor(1);
+    Utils::SensorUtil::instance()->enableSensor(3);
+    Utils::SensorUtil::instance()->enableSensor(8);
+    Utils::SensorUtil::instance()->enableSensor(7);
+    Utils::AsservUtil::instance()->forward(1000);
     break;
     case 2:
     Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
@@ -29,8 +33,11 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
     break;
     case 5:
+    std::this_thread::sleep_for(std::chrono::milliseconds(30000));
+    break;
+    case 6:
     if(!translation_) break;
-    Utils::AsservUtil::instance()->forward(300);
+    Utils::AsservUtil::instance()->forward(1000);
     break;
     default:
     // Anomaly
@@ -40,7 +47,7 @@ void TestProtocol::update(){ //execute the next action of this protocol
 }
 
 bool TestProtocol::isCompleted(){ //wether the last action of this protocol have already been executed or not
-  return state_>5;
+  return state_>6;
 }
 
 unsigned short int TestProtocol::getPriority(){

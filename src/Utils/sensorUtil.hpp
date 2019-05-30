@@ -16,10 +16,10 @@ namespace Utils{
     private:
         bool enabledSensors[SENSOR_COUNT]{false};
         bool sensorValues[SENSOR_COUNT]{true};
-        int activeSensorsNum{0};
         std::mutex sensorMutex{};
         static SensorUtil *instance_;
         SerialControl::Module *module_{};
+ 	bool hasDetected();
     public:
         static SensorUtil *instance();
 
@@ -30,6 +30,7 @@ namespace Utils{
         static void cb(const std::string& str);
         void reset();
         void enableSensor(int id);
+       
         inline void disable(){module_->sendCommand("deactivate;");}
         inline void enable(){module_->sendCommand("activate;");
 		module_->sendCommand("dsensors;");

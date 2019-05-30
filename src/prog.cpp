@@ -2,7 +2,7 @@
 #include <thread>
 #include <iostream>
 
-//#define RPI
+#define RPI
 #ifdef RPI
 #include <wiringPi.h>
 #else

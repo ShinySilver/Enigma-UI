@@ -46,6 +46,8 @@ namespace AI{
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
       }
 
+          std::cout<<"Et on repart!\n";
+
       /**
        * Si on atteint la fin du match, l'ia s'arrête
        */
@@ -54,14 +56,17 @@ namespace AI{
       }
       protocolIdMutex_.lock();
       if(isBusy_()){
+          std::cout<<"MB busy\n";
           std::this_thread::sleep_for(std::chrono::milliseconds(10));
       }else{
+          std::cout<<"MB pas busy\n";
           if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {
             autoselectProtocol();
             std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Plus de stabilité
           }
           if(selectedProtocolId_!=-1) protocols_[selectedProtocolId_]->update();
           protocolIdMutex_.unlock();
+          std::cout<<"MB tjs pas busy\n";
       }
     }
     if(onDisable_) onDisable_(); // Un callback pour couper les actionneurs

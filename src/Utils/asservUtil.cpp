@@ -30,6 +30,7 @@ namespace Utils{
 
     void AsservUtil::forward(int distance){
         if(motionBase_){
+            instance()->isBusy_=true;
             motionBase_->sendCommand("forward:"+std::to_string(distance)+";");
         }
         #ifdef DEBUG
@@ -41,6 +42,7 @@ namespace Utils{
 
     void AsservUtil::rotate(double angle){
         if(motionBase_){
+        instance()->isBusy_=true;
             motionBase_->sendCommand("rotate:"+std::to_string(angle)+";");
         }
         #ifdef DEBUG
@@ -57,6 +59,7 @@ namespace Utils{
                 command+=p.toString()+",";
             }
             command+=std::to_string(targetedAngle);
+            instance()->isBusy_=true;
             motionBase_->sendCommand(command+";");
         }
         #ifdef DEBUG

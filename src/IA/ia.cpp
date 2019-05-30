@@ -65,9 +65,9 @@ namespace AI{
             std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Plus de stabilité
           }
           if(selectedProtocolId_!=-1) protocols_[selectedProtocolId_]->update();
-          protocolIdMutex_.unlock();
           std::cout<<"MB tjs pas busy\n";
       }
+      protocolIdMutex_.unlock();
     }
     if(onDisable_) onDisable_(); // Un callback pour couper les actionneurs
   }

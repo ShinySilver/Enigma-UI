@@ -55,7 +55,7 @@ class Module {
 	int watch(void callback(const std::string& cmd));
 
 	private:
-	//mutable std::mutex *moduleMutex_{};
+	mutable std::mutex *moduleMutex_{};
 	int fileDescriptor;
 	struct termios oldAttr;
 	std::function<void(std::string&)> callback;

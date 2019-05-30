@@ -56,16 +56,16 @@ namespace AI{
       }
       protocolIdMutex_.lock();
       if(isBusy_()){
-          std::cout<<"MB busy\n";
+          //std::cout<<"MB busy\n";
           std::this_thread::sleep_for(std::chrono::milliseconds(100));
       }else{
-          std::cout<<"MB pas busy\n";
+          //std::cout<<"MB pas busy\n";
           if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {
             autoselectProtocol();
             std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Plus de stabilité
           }
           if(selectedProtocolId_!=-1) protocols_[selectedProtocolId_]->update();
-          std::cout<<"MB tjs pas busy\n";
+          //std::cout<<"MB tjs pas busy\n";
       }
       protocolIdMutex_.unlock();
     }

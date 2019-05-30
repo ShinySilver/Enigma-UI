@@ -8,6 +8,7 @@
 #include <fstream>
 #include <tuple>
 #include <functional>
+#include <mutex>
 
 //----c libs
 #include <termios.h>
@@ -26,7 +27,7 @@ namespace SerialControl {
 #define WRITE_FAIL "sc_wf"
 #define READ_FAIL "sc_rf"
 #define NO_RESPONSE "sc_nr"
-#define SERIAL_TIMEOUT 1 //read timeout time (in 0.1 of secs) 
+#define SERIAL_TIMEOUT 1 //read timeout time (in 0.1 of secs)
 
 
 //----Module class
@@ -42,7 +43,7 @@ class Module {
 	std::string name;
 
 	Module(const std::string name, const int fd, const struct termios oldAttr):
-		name{name}, fileDescriptor{fd}, oldAttr{oldAttr} {}
+		name{name}, moduleMutex_{}, fileDescriptor{fd}, oldAttr{oldAttr} {}
 
 	/**
 	 * send a command to the device and check for a response
@@ -51,13 +52,14 @@ class Module {
 	/**
 	 * set a lambda function that will be called in the update function when the device emit a message
 	 */
-	int watch(void callback(const std::string& cmd)); 
+	int watch(void callback(const std::string& cmd));
 
 	private:
+	mutable std::mutex *moduleMutex_;
 	int fileDescriptor;
 	struct termios oldAttr;
 	std::function<void(std::string&)> callback;
-	
+
 	/**
  	* check all watched modules and execute the lambda associed
  	*/
@@ -92,4 +94,3 @@ int update();
 } //namespace SerialControl
 
 #endif
-

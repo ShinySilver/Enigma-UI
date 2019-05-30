@@ -4,6 +4,7 @@
 
 #include "../Utils/asservUtil.hpp"
 #include "../Utils/sensorUtil.hpp"
+#include "../Utils/Settings.hpp"
 
 void TestProtocol::update(){ //execute the next action of this protocol
   switch(state_){

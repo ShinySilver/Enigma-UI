@@ -45,7 +45,8 @@ namespace Utils{
             inline void enable(){motionBase_->sendCommand("activate;");}
         private:
             static AsservUtil *instance_;
-            std::atomic_bool isBusy_{false};
+            bool isBusy_{false};
+            std::mutex bMutex{};
             SerialControl::Module *motionBase_;
 
             static void cb(const std::string& str);

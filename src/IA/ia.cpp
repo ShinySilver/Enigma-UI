@@ -46,7 +46,7 @@ namespace AI{
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
       }
 
-          std::cout<<"Et on repart!\n";
+      std::cout<<"Et on repart!\n";
 
       /**
        * Si on atteint la fin du match, l'ia s'arrête

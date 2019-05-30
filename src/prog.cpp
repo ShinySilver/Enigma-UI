@@ -72,6 +72,8 @@ int main(void) {
       std::cout<<"AI stopped.\n";
   },[](){
       std::cout<<"AI started.\n";
+  },[](){
+      return Utils::AsservUtil::instance()->isBusy();
   });
   ia->addProtocol(new TestProtocol(0, 0, 0.0, "Ceci est un message envoyé par le protocole 1\n"));
   ia->addProtocol(new TestProtocol(1, 1000, 0.0, "Ceci est un message envoyé par le protocole 2\n"));

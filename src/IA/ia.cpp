@@ -3,7 +3,7 @@
 
 namespace AI{
 
-  IA::IA(void (*onDisable)(),void (*onEnable)()):
+  IA::IA(void (*onDisable)(),void (*onEnable)(), bool (*isBusy)()):
     protocols_{},
     protocolCount_{},
     protocolIdMutex_{},
@@ -11,6 +11,7 @@ namespace AI{
     enabled_{false},
     onEnable_{onEnable},
     onDisable_{onDisable},
+    isBusy_{isBusy},
     mainLoop_{&IA::update, this} {
 
     }
@@ -52,6 +53,10 @@ namespace AI{
         break;
       }
       protocolIdMutex_.lock();
+      if(isBusy_()){
+          std::this_thread::sleep_for(std::chrono::milliseconds(10));
+          continue;
+      }
       if (selectedProtocolId_==-1||protocols_[selectedProtocolId_]->isCompleted()) {
         autoselectProtocol();
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Plus de stabilité

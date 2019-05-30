@@ -23,7 +23,7 @@ namespace AI{
       /**
        * Constructors
        */
-      IA(void (*onEnable)()=0,void (*onDisable)()=0);
+      IA(void (*onEnable)()=0, void (*onDisable)()=0, bool (*isBusy)()=0);
 
       /**
        * Ajout d'un protocole créé de manière dynamique
@@ -60,6 +60,7 @@ namespace AI{
 
       void (*onEnable_)();
       void (*onDisable_)();
+      bool (*isBusy_)();
 
       void update();
       std::thread mainLoop_;

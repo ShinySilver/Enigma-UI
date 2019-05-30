@@ -56,8 +56,10 @@ int readMessage(int fd, char* data) {
 
 //----Module functions
 
-std::string 
+std::string
 Module::sendCommand(const std::string& cmd) const{
+
+	moduleMutex_->lock();
 
 	//TODO add support for commands longer than MAX_MESSAGE_SIZE
 	const ssize_t size = cmd.size();
@@ -71,20 +73,23 @@ Module::sendCommand(const std::string& cmd) const{
 		ERROR_MSG("could not write message to " << this->name);
 		return WRITE_FAIL;
 	}
-	
+
 	char data[MAX_MESSAGE_SIZE];
 	const int n = readMessage(this->fileDescriptor,data);
 
 	if(n>0) { return std::string{data}; }
 	if(!n) { return std::string{NO_RESPONSE}; }
 	DEBUG_MSG("ccould not get message from " << this->name);
+	moduleMutex_->unlock();
 	return READ_FAIL;
 }
 
 
-int 
+int
 Module::watch(void callback(const std::string& cmd)) {
+	moduleMutex_->lock();
 	this->callback = callback;
+	moduleMutex_->unlock();
 	return 0;
 }
 
@@ -92,17 +97,16 @@ Module::watch(void callback(const std::string& cmd)) {
 //----functions
 
 std::vector<Module*> listModules(){
-	
 	moduleList.clear();
 	std::vector<Module*> modules;
 
 	//for each paths defined in hpp
 	for(auto &elem: paths)	{
-	
+
 		//TODO add dynamic search of modules
 		for(int i=0; i<=MAX_INDEX; i++) {
 
-			if(i/10) { 
+			if(i/10) {
 				elem[11] = char(i/10 + '0');
 				elem[12] = char(i%10 + '0');
 			} else {
@@ -110,19 +114,19 @@ std::vector<Module*> listModules(){
 				elem[12] = '\0';
 			}
 
-			DEBUG_MSG(elem); 
+			DEBUG_MSG(elem);
 
 			//open file in R/W and without linking it to a terminal
 			const int fd = open(elem, O_RDWR | O_NOCTTY);
 			if(!fd) {
-				DEBUG_MSG("could not open " << elem); 
+				DEBUG_MSG("could not open " << elem);
 				continue;
 			}
 
 			//store default config to reapply it when communication end
 			struct termios oldAttr;
 			if(tcgetattr(fd, &oldAttr)) {
-				DEBUG_MSG("could not get config for " << elem); 
+				DEBUG_MSG("could not get config for " << elem);
 				continue;
 			}
 
@@ -142,7 +146,7 @@ std::vector<Module*> listModules(){
 				DEBUG_MSG("Could not apply config for " << elem);
 				continue;
 			}
-			
+
 			//clear the file
 			tcflush(fd,TCIOFLUSH);
 
@@ -162,7 +166,7 @@ std::vector<Module*> listModules(){
 			modules.emplace_back(&moduleList.back());	//get the module adress (moving adress issues ?)
 
 		}
-		
+
 	}
 
 	if(initialized) return modules;
@@ -173,7 +177,6 @@ std::vector<Module*> listModules(){
 
 
 int update() {
-
 	int nbResp = 0;
 
 	for(const auto &elem: moduleList) {
@@ -198,4 +201,3 @@ int update() {
 
 
 } //namespace SerialControl
-

@@ -56,9 +56,10 @@ int readMessage(int fd, char* data) {
 
 //----Module functions
 
-std::string Module::sendCommand(const std::string& cmd){
+std::string
+Module::sendCommand(const std::string& cmd){
 
-	moduleMutex_.lock();
+	//moduleMutex_.lock();
 
 	//TODO add support for commands longer than MAX_MESSAGE_SIZE
 	const ssize_t size = cmd.size();
@@ -70,7 +71,7 @@ std::string Module::sendCommand(const std::string& cmd){
 	DEBUG_MSG("sending to " << this->name << " : " << cmd);
 	if(i == WRITE_TRY_NB) {
 		ERROR_MSG("could not write message to " << this->name);
-		moduleMutex_.unlock();
+		//moduleMutex_.unlock();
 		return WRITE_FAIL;
 	}
 
@@ -80,16 +81,18 @@ std::string Module::sendCommand(const std::string& cmd){
 	if(n>0) { return std::string{data}; }
 	if(!n) { return std::string{NO_RESPONSE}; }
 	DEBUG_MSG("ccould not get message from " << this->name);
-	moduleMutex_.unlock();
+	//moduleMutex_.unlock();
 	return READ_FAIL;
 }
 
 
 int
 Module::watch(void callback(const std::string& cmd)) {
-	moduleMutex_.lock();
+	std::cout<<"OH";
+	//moduleMutex_.lock();
 	this->callback = callback;
-	moduleMutex_.unlock();
+	//moduleMutex_.unlock();
+	std::cout<<"AH";
 	return 0;
 }
 

@@ -39,7 +39,7 @@ void TestProtocol::update(){ //execute the next action of this protocol
 }
 
 bool TestProtocol::isCompleted(){ //wether the last action of this protocol have already been executed or not
-  return state_>5||(translation_==0&&state_>1);
+  return state_>5;
 }
 
 unsigned short int TestProtocol::getPriority(){

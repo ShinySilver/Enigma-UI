@@ -42,7 +42,7 @@ namespace Utils{
 
     void AsservUtil::rotate(double angle){
         if(motionBase_){
-        instance()->isBusy_=true;
+            instance()->isBusy_=true;
             motionBase_->sendCommand("rotate:"+std::to_string(angle)+";");
         }
         #ifdef DEBUG

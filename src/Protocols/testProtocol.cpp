@@ -18,14 +18,14 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::AsservUtil::instance()->forward(300);
     break;
     case 2:
-    Utils::AsservUtil::instance()->rotate(PI/2);
+    Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
     break;
     case 3:
     if(!translation_) break;
     Utils::AsservUtil::instance()->forward(300);
     break;
     case 4:
-    Utils::AsservUtil::instance()->rotate(PI/2);
+    Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
     break;
     case 5:
     if(!translation_) break;

@@ -39,7 +39,7 @@ void Utils::SensorUtil::reset() {
     instance()->sensorMutex.lock();
     for(int i=0; i<SENSOR_COUNT; i++) {
 	instance_->enabledSensors[i] = false;
-    instance_->sensorValues[i] = 0;
+    instance_->sensorValues[i] = false;
     }
     instance_->activeSensorsNum = 0;
     instance_->module_->sendCommand("dsensors;");
@@ -47,7 +47,7 @@ void Utils::SensorUtil::reset() {
 }
 
 Utils::SensorUtil *Utils::SensorUtil::instance(){
-    if(!instance()){
+    if(!instance_){
         instance_ = new SensorUtil;
         #ifdef DEBUG
         std::cout << "Instance de SensorUtil créée\n";

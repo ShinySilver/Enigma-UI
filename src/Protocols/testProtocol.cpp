@@ -12,7 +12,6 @@ void TestProtocol::update(){ //execute the next action of this protocol
     std::cout<<text_;
     break;
     case 1:
-    if(!translation_) break;
     Utils::SensorUtil::instance()->reset();
     Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
     Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
@@ -26,7 +25,6 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
     break;
     case 3:
-    if(!translation_) break;
     Utils::AsservUtil::instance()->forward(300);
     break;
     case 4:

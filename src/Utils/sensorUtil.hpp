@@ -30,6 +30,7 @@ namespace Utils{
         static void cb(const std::string& str);
         void reset();
         void enableSensor(int id);
+		void disableSensor(int id);
        
         inline void disable(){module_->sendCommand("deactivate;");}
         inline void enable(){module_->sendCommand("activate;");

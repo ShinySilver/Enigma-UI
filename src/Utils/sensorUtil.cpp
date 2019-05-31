@@ -38,27 +38,43 @@ bool Utils::SensorUtil::hasDetected(){
 
 void Utils::SensorUtil::enableSensor(int id){
     instance()->sensorMutex.lock();
-    instance_->enabledSensors[id]=true;
-    if(instance_->hasDetected()) Utils::AsservUtil::instance()->pause();
-    instance_->sensorMutex.unlock();
+    
+	instance_->enabledSensors[id]=true;
+   	if(instance_->sensorValues[id]) Utils::AsservUtil::instance()->pause();
+    
+	instance_->sensorMutex.unlock();
+}
+
+void Utils::SensorUtil::disableSensor(int id){
+	instance()->sensorMutex.lock();
+
+	instance_->enabledSensors[id] = false;
+
+	instance_->sensorMutex.unlock();
 }
 
 void Utils::SensorUtil::reset() {
     instance()->sensorMutex.lock();
+
     for(int i=0; i<SENSOR_COUNT; i++) {
 	instance_->enabledSensors[i] = false;
         instance_->sensorValues[i] = false;
     }
-    if(instance_->module_) instance_->module_->sendCommand("dsensors;");
-    instance_->sensorMutex.unlock();
+    if(instance_->module_) {
+		if(instance_->module_->sendCommand("dsensors;") == "sending") {
+			std::cout << "reseted sensors\n";
+		}
+	}
+    
+	instance_->sensorMutex.unlock();
 }
 
 Utils::SensorUtil *Utils::SensorUtil::instance(){
     if(!instance_){
         instance_ = new SensorUtil;
 	#ifdef DEBUG
-        std::cout << "Instance de SensorUtil créée\n";
-        #endif
+    std::cout << "Instance de SensorUtil créée\n";
+    #endif
     }
     return instance_;
 }

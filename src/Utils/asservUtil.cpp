@@ -15,8 +15,10 @@ namespace Utils{
     }
 
     void AsservUtil::setSerialModule(SerialControl::Module *module){
-        motionBase_=module;
-        motionBase_->watch(this->cb);
+		if(module) {
+       		motionBase_=module;
+        	motionBase_->watch(this->cb);
+		}
     }
 
     void AsservUtil::cb(const std::string& str){

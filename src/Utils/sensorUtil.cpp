@@ -10,11 +10,11 @@ void Utils::SensorUtil::cb(const std::string& str){
         if(instance_->enabledSensors[id]){
             std::cout<<"Le capteur #"<<id<<" est passé à l'état "<<value<<'\n';
             instance_->sensorValues[id]=value;
-	    if(instance_->hasDetected()){
-	        std::cout << "pause\n";
+	    	if(instance_->hasDetected()){
+	        	std::cout << "pause\n";
                 Utils::AsservUtil::instance()->pause();
             }else {
-    		std::cout << "resume\n";
+    			std::cout << "resume\n";
                 Utils::AsservUtil::instance()->resume();
             }
         }
@@ -23,17 +23,6 @@ void Utils::SensorUtil::cb(const std::string& str){
     #ifdef DEBUG
     std::cout << "DEBUG SENSORS: " << str << "\n";
     #endif
-}
-
-bool Utils::SensorUtil::hasDetected(){
-    for(int i=0; i<SENSOR_COUNT; i++) {
-	if(instance_->enabledSensors[i]) {
-	    if(instance_->sensorValues[i]) {
-		return true;
-	    }
-	}
-    }
-    return false;
 }
 
 void Utils::SensorUtil::enableSensor(int id){
@@ -57,16 +46,20 @@ void Utils::SensorUtil::reset() {
     instance()->sensorMutex.lock();
 
     for(int i=0; i<SENSOR_COUNT; i++) {
-	instance_->enabledSensors[i] = false;
+		instance_->enabledSensors[i] = false;
         instance_->sensorValues[i] = false;
     }
     if(instance_->module_) {
-		if(instance_->module_->sendCommand("dsensors;") == "sending") {
-			std::cout << "reseted sensors\n";
-		}
+		instance_->initValues();
+		std::cout << "reseted sensors\n";
 	}
     
 	instance_->sensorMutex.unlock();
+}
+
+void Utils::SensorUtil::enable() {
+	instance()->module_->sendCommand("activate;");
+	instance_->initValues();
 }
 
 Utils::SensorUtil *Utils::SensorUtil::instance(){
@@ -78,3 +71,28 @@ Utils::SensorUtil *Utils::SensorUtil::instance(){
     }
     return instance_;
 }
+
+
+//----private functions
+//these function have no mutex, so you must only use them
+//in a function with is already thread-safe
+
+bool Utils::SensorUtil::hasDetected(){
+    for(int i=0; i<SENSOR_COUNT; i++) {
+		if(instance_->enabledSensors[i]) {
+	    	if(instance_->sensorValues[i]) {
+				return true;
+	    	}
+		}
+	}
+    return false;
+}
+
+void Utils::SensorUtil::initValues() {
+	const std::string sensors = instance()->module_->sendCommand("dsensors;");
+	std::cout << sensors << "\n";
+	for(int i=0; i<SENSOR_COUNT; i++){
+		sensorValues[i]=sensors[i]-'0';
+	}
+}
+

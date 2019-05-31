@@ -4,8 +4,13 @@
 #define SENSOR_COUNT 9
 #define FRONT_LEFT_SENSOR 0
 #define FRONT_RIGHT_SENSOR 4
-#define LEFT_FRONT_SENSOR 0
-#define LEFT_RIGHT_SENSOR 0
+#define LEFT_FRONT_SENSOR 3
+#define RIGHT_FRONT_SENSOR 8
+#define LEFT_BACK_SENSOR 1
+#define RIGHT_BACK_SENSOR 6
+#define BACK_LEFT_SENSOR 2
+#define BACK_RIGHT_SENSOR 7
+#define EXTRA_SENSOR 5
 
 #include <thread>
 #include <mutex>
@@ -19,7 +24,8 @@ namespace Utils{
         std::mutex sensorMutex{};
         static SensorUtil *instance_;
         SerialControl::Module *module_{};
- 	bool hasDetected();
+		bool hasDetected();
+		void initValues();
     public:
         static SensorUtil *instance();
 
@@ -31,11 +37,9 @@ namespace Utils{
         void reset();
         void enableSensor(int id);
 		void disableSensor(int id);
-       
+        void enable();
+
         inline void disable(){module_->sendCommand("deactivate;");}
-        inline void enable(){module_->sendCommand("activate;");
-		module_->sendCommand("dsensors;");
-		module_->sendCommand("dsensors;");}
     };
 }
 #endif /* end of include guard: SENSOR_MANAGER_H */

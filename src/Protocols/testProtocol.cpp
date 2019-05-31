@@ -15,10 +15,10 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::SensorUtil::instance()->reset();
     Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
     Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
-    Utils::SensorUtil::instance()->enableSensor(1);
-    Utils::SensorUtil::instance()->enableSensor(3);
-    Utils::SensorUtil::instance()->enableSensor(8);
-    Utils::SensorUtil::instance()->enableSensor(7);
+    Utils::SensorUtil::instance()->enableSensor(LEFT_FRONT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(RIGHT_FRONT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(LEFT_BACK_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(RIGHT_BACK_SENSOR);
     Utils::AsservUtil::instance()->forward(1000);
     break;
     case 2:

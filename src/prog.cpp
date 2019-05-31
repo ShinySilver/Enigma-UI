@@ -2,7 +2,7 @@
 #include <thread>
 #include <iostream>
 
-#define RPI
+//#define RPI
 #ifdef RPI
 #include <wiringPi.h>
 #else
@@ -27,6 +27,7 @@
 
 #include "Utils/sensorUtil.hpp"
 #include "Utils/asservUtil.hpp"
+#include "Utils/armUtil.hpp"
 
 #include "pinout.hpp"
 
@@ -166,6 +167,9 @@ int main(void) {
         std::cout<<"MotionBase connectée\n";
         Utils::AsservUtil::instance()->setSerialModule(elem);
         Utils::AsservUtil::instance()->enable();
+    }else if(elem->name=="ArmBoard"){
+        std::cout<<"Armboard connectée\n";
+        Utils::ArmUtil::instance()->module=elem;
     }
   }
 

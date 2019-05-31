@@ -15,26 +15,45 @@ void TestProtocol::update(){ //execute the next action of this protocol
     Utils::SensorUtil::instance()->reset();
     Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
     Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
-    Utils::SensorUtil::instance()->enableSensor(LEFT_FRONT_SENSOR);
-    Utils::SensorUtil::instance()->enableSensor(RIGHT_FRONT_SENSOR);
-    Utils::SensorUtil::instance()->enableSensor(LEFT_BACK_SENSOR);
-    Utils::SensorUtil::instance()->enableSensor(RIGHT_BACK_SENSOR);
     Utils::AsservUtil::instance()->forward(1000);
     break;
     case 2:
-    Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
+	Utils::SensorUtil::instance()->disableSensor(FRONT_LEFT_SENSOR);
+    Utils::SensorUtil::instance()->disableSensor(FRONT_RIGHT_SENSOR);
+	Utils::SensorUtil::instance()->enableSensor(LEFT_FRONT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(RIGHT_FRONT_SENSOR);
+   	Utils::SensorUtil::instance()->enableSensor(LEFT_BACK_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(RIGHT_BACK_SENSOR);
+	Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
     break;
     case 3:
-    Utils::AsservUtil::instance()->forward(300);
+    Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
+	Utils::SensorUtil::instance()->disableSensor(LEFT_FRONT_SENSOR);
+    Utils::SensorUtil::instance()->disableSensor(RIGHT_FRONT_SENSOR);
+   	Utils::SensorUtil::instance()->disableSensor(LEFT_BACK_SENSOR);
+    Utils::SensorUtil::instance()->disableSensor(RIGHT_BACK_SENSOR);
+	Utils::AsservUtil::instance()->forward(300);
     break;
     case 4:
-    Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
+    Utils::SensorUtil::instance()->disableSensor(FRONT_LEFT_SENSOR);
+    Utils::SensorUtil::instance()->disableSensor(FRONT_RIGHT_SENSOR);
+	Utils::SensorUtil::instance()->enableSensor(LEFT_FRONT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(RIGHT_FRONT_SENSOR);
+   	Utils::SensorUtil::instance()->enableSensor(LEFT_BACK_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(RIGHT_BACK_SENSOR);
+	Utils::AsservUtil::instance()->rotate(Utils::Settings::getFlag("isLeftSide")?PI/2:-PI/2);
     break;
     case 5:
     std::this_thread::sleep_for(std::chrono::milliseconds(30000));
     break;
     case 6:
-    if(!translation_) break;
+	Utils::SensorUtil::instance()->enableSensor(FRONT_LEFT_SENSOR);
+    Utils::SensorUtil::instance()->enableSensor(FRONT_RIGHT_SENSOR);
+	Utils::SensorUtil::instance()->disableSensor(LEFT_FRONT_SENSOR);
+    Utils::SensorUtil::instance()->disableSensor(RIGHT_FRONT_SENSOR);
+   	Utils::SensorUtil::instance()->disableSensor(LEFT_BACK_SENSOR);
+    Utils::SensorUtil::instance()->disableSensor(RIGHT_BACK_SENSOR);
     Utils::AsservUtil::instance()->forward(1000);
     break;
     default:

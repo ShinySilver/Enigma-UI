@@ -6,7 +6,7 @@
 #~~~~ control global settings ~~~~
 # make opt=1 --> enable optimisation, then disable debug
 # make opt=0 --> disable optimisation, then enable debug
-opt=0
+opt=1
 # make clang=1 --> use clang/clang++, not gcc/g++
 # make clang=0 --> use gcc/g++, not clang/clang++
 clang=0

@@ -159,7 +159,9 @@ int main(void) {
         std::cout<<"SensorBoard connectée\n";
         Utils::SensorUtil::instance()->setSerialModule(elem);
         Utils::SensorUtil::instance()->enable();
+		std::cout << "yay\n";
         elem->watch(Utils::SensorUtil::cb);
+		std::cout << "fluffy\n";
     }else if(elem->name=="MotionBase"){
         std::cout<<"MotionBase connectée\n";
         Utils::AsservUtil::instance()->setSerialModule(elem);

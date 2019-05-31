@@ -90,7 +90,7 @@ bool Utils::SensorUtil::hasDetected(){
 
 void Utils::SensorUtil::initValues() {
 	const std::string sensors = instance()->module_->sendCommand("dsensors;");
-	std::cout << sensors << "\n";
+	std::cout << "dsensors; returned : " << sensors << "\n";
 	for(int i=0; i<SENSOR_COUNT; i++){
 		sensorValues[i]=sensors[i]-'0';
 	}

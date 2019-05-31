@@ -59,7 +59,7 @@ int readMessage(int fd, char* data) {
 std::string
 Module::sendCommand(const std::string& cmd){
 
-	//moduleMutex_.lock();
+	this->moduleMutex_.lock();
 
 	//TODO add support for commands longer than MAX_MESSAGE_SIZE
 	const ssize_t size = cmd.size();
@@ -71,28 +71,35 @@ Module::sendCommand(const std::string& cmd){
 	DEBUG_MSG("sending to " << this->name << " : " << cmd);
 	if(i == WRITE_TRY_NB) {
 		ERROR_MSG("could not write message to " << this->name);
-		//moduleMutex_.unlock();
+		this->moduleMutex_.unlock();
 		return WRITE_FAIL;
 	}
 
 	char data[MAX_MESSAGE_SIZE];
 	const int n = readMessage(this->fileDescriptor,data);
 
-	if(n>0) { return std::string{data}; }
-	if(!n) { return std::string{NO_RESPONSE}; }
+	if(n>0) { 
+		this->moduleMutex_.unlock();
+		return std::string{data}; 
+	}
+	if(!n) {
+		this->moduleMutex_.unlock();
+		return std::string{NO_RESPONSE}; 
+	}
 	DEBUG_MSG("ccould not get message from " << this->name);
-	//moduleMutex_.unlock();
+
+	this->moduleMutex_.unlock();
 	return READ_FAIL;
 }
 
 
 int
 Module::watch(void callback(const std::string& cmd)) {
-	std::cout<<"OH";
-	//moduleMutex_.lock();
+	this->moduleMutex_.lock();
+
 	this->callback = callback;
-	//moduleMutex_.unlock();
-	std::cout<<"AH";
+
+	this->moduleMutex_.unlock();
 	return 0;
 }
 
@@ -179,16 +186,21 @@ std::vector<Module*> listModules(){
 
 
 int update() {
+	
 	int nbResp = 0;
 
 	for(const auto &elem: moduleList) {
+		elem->moduleMutex_.lock();
 		if(elem->callback) {
 			char data[MAX_MESSAGE_SIZE];
 			const int n = readMessage(elem->fileDescriptor,data);
 
 			std::string tmp;
 			if(n>0) tmp = std::string{data};
-			else if(!n) continue;
+			else if(!n) {
+				elem->moduleMutex_.unlock();
+				continue;
+			}
 			else {
 				tmp = READ_FAIL;
 				ERROR_MSG("message to long from " << elem->name);
@@ -196,6 +208,7 @@ int update() {
 			DEBUG_MSG("from " << elem->name << " : " << tmp);
 			elem->callback(tmp);
 		}
+		elem->moduleMutex_.unlock();
 	}
 
 	return nbResp;

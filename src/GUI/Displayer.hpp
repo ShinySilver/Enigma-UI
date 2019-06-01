@@ -1,5 +1,5 @@
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#ifndef DISPLAYER_HPP
+#define DISPLAYER_HPP
 
 #include <string>
 #include <functional>
@@ -12,21 +12,20 @@
 
 
 namespace GUI{
-  class Button : public Component, private ActionListener{
+  class Displayer : public Component, private ActionListener{
 
     public:
-      Button(std::string text, sf::Vector2f pos,
+      Displayer(std::string (*textRef)(), sf::Vector2f pos,
           sf::Vector2f size = sf::Vector2f(0,0),
-          void (*callback)() = 0,
+          void (*cb)() = 0,
           const sf::Color borderColor=sf::Color::White,
           const sf::Color fgColor=sf::Color::Black,
           const sf::Color textColor = sf::Color::Black,
           std::string fontPath= "assets/fonts/arialbd.ttf"):
-              pos_{pos},
-              cb_{callback}{
+              pos_{pos}, textRef_{textRef}, cb_{cb}{
         // TODO: faire un gestionnaire des polices
         if(!font_.loadFromFile(fontPath))      throw std::runtime_error("Could not find font at " + fontPath);
-        text_ = sf::Text{text, font_};
+        text_ = sf::Text{textRef_(), font_};
         sf::FloatRect textRect = text_.getLocalBounds();
         text_.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
         text_.setPosition(pos_.x, pos_.y);
@@ -46,29 +45,20 @@ namespace GUI{
         border_.setPosition(pos_.x, pos_.y);
         border_.setFillColor(fgColor);
 
-        sprite_ = new sf::Sprite();
-        sprite_->setPosition(pos_.x, pos_.y);
-
         size_=size;
         this->addActionListener(this);
       }
 
       void render(sf::RenderTarget& target, sf::RenderStates states=sf::RenderStates::Default) override{
+        text_.setString(textRef_());
         target.draw(border_, states);
         target.draw(rectangle_, states);
-        if(sprite_) target.draw(*sprite_, states);
         target.draw(text_, states);
       }
 
-      bool contains(int posX, int posY){
+      inline bool contains(int posX, int posY){
         return posX<pos_.x+size_.x/2.0 && posX>pos_.x-size_.x/2.0
                && posY<pos_.y+size_.y/2.0 && posY>pos_.y-size_.y/2.0;
-      }
-
-      void setIcon(sf::Texture *texture){
-        auto size = texture->getSize();
-        sprite_->setTexture(*texture);
-        sprite_->setOrigin((float)size.x/2,(float)size.y/2);
       }
 
       void actionPerformed(sf::Event e) override{
@@ -84,10 +74,10 @@ namespace GUI{
 
     private:
       sf::Text text_;
-      sf::Sprite *sprite_;
       sf::Vector2f pos_, size_;
       sf::RectangleShape rectangle_, border_;
       sf::Font font_;
+      std::string (*textRef_)();
       void (*cb_)();
 
   };

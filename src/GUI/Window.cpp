@@ -8,15 +8,21 @@ namespace GUI {
 
   void Window::setContent(Component *c){
     contentPaneMutex.lock();
+    if(contentPane_){
+      std::cout<<"ContentPane Changed!\n";
+    }else{
+      std::cout<<"Window's content pane set!\n";
+    }
     contentPane_ = c;
-    std::cout<<"ContentPane Changed!\n";
     contentPaneMutex.unlock();
-    //render();
+    render();
   }
 
   void Window::close(){
     std::cout<<"Window closing... ";
+    winMutex.lock();
     win_.close();
+    winMutex.unlock();
     std::cout<<"done\n";
   }
 
@@ -33,22 +39,33 @@ namespace GUI {
     }
   }
 
-  void Window::render(){
+  void Window::renderLoop(){
+    if(framerate_<=0){
+      std::cout<<"Render loop disabled\n";
+      return;
+    }
+     // Si on désactive les animations, les rendus sont générés par les events
+    const auto period = std::chrono::milliseconds((int)(1000/framerate_));
     auto next_frame = std::chrono::steady_clock::now();
     while(true){
-       next_frame += std::chrono::milliseconds(1000/30); // 30 render per second
+      next_frame += period; // 30 render per second
+      winMutex.lock();
+      if(!win_.isOpen()) return;
+      winMutex.unlock();
+      render();
 
-       winMutex.lock();
-       if(!win_.isOpen()) return;
-       win_.clear(bgColor_);
-       contentPaneMutex.lock();
-       if(contentPane_) contentPane_->render(this->win_);
-       contentPaneMutex.unlock();
-       win_.display();
-       winMutex.unlock();
-
-       std::this_thread::sleep_until(next_frame);
+      std::this_thread::sleep_until(next_frame);
     }
+  }
+
+  void Window::render(){
+    winMutex.lock();
+    win_.clear(bgColor_);
+    contentPaneMutex.lock();
+    if(contentPane_)contentPane_->render(this->win_);
+    contentPaneMutex.unlock();
+    win_.display();
+    winMutex.unlock();
   }
 
   void Window::handleEvent(){
@@ -65,6 +82,14 @@ namespace GUI {
       if (e.type == sf::Event::Closed){
         close();
         return;
+      }else if (e.type == sf::Event::MouseButtonReleased
+                || e.type == sf::Event::TouchEnded){
+            auto now = std::chrono::steady_clock::now();
+            if(now-lastClick_<std::chrono::milliseconds(500)){
+                std::cout << "Double clic détecté: refresh de l'ecran\n";
+                render();
+            }
+            lastClick_=now;
       }
       contentPaneMutex.lock();
       const std::vector<ActionListener *> *actionListeners;

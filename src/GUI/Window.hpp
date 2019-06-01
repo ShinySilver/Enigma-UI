@@ -5,6 +5,7 @@
 #include <tuple>
 #include <atomic>
 #include <mutex>
+#include <chrono>
 
 #include "SFML/Graphics.hpp"
 
@@ -13,14 +14,16 @@
 namespace GUI {
   class Window {
     public :
-      Window(std::string n="Window", double w=800.0, double h=480.0, sf::Color bgColor = sf::Color(0, 100, 100)):
+      Window(std::string n="Window", double w=800.0, double h=480.0, double framerate = 0.5, sf::Color bgColor = sf::Color(0, 100, 100)):
                                                           win_{sf::VideoMode{(unsigned int)w, (unsigned int)h}, n.data()},
                                                           winMutex{},
                                                           contentPane_{},
                                                           contentPaneMutex{},
                                                           bgColor_{bgColor},
+                                                          framerate_{framerate},
+                                                          lastClick_{std::chrono::steady_clock::now()},
                                                           eventHandler_{&Window::handleEvent, this},
-                                                          renderer_{&Window::render, this}
+                                                          renderer_{&Window::renderLoop, this}
       {
         winMutex.lock();
         win_.requestFocus();
@@ -37,9 +40,11 @@ namespace GUI {
       void join();
       void close();
 
+      void render();
+
     private :
       void handleEvent();
-      void render();
+      void renderLoop();
 
       sf::RenderWindow win_;
       std::mutex winMutex; // Protège le code SFML
@@ -49,8 +54,11 @@ namespace GUI {
 
       sf::Color bgColor_;
 
+      std::atomic<double> framerate_;
+      std::chrono::steady_clock::time_point lastClick_;
       std::thread eventHandler_;
       std::thread renderer_;
+
   };
 }
 

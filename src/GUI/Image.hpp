@@ -16,6 +16,9 @@ namespace GUI{
         if (!texture_.loadFromFile(path)){
           throw std::runtime_error("Could not find texture at " + path);
         }
+        #ifndef DESKTOP
+        std::this_thread::sleep_for(std::chrono::milliseconds(300)); // un délai pour le chargement de l'image
+        #endif
         texture_.setSmooth(true);
         texture_.setRepeated(true);
         auto size = texture_.getSize();

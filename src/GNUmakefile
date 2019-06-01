@@ -6,7 +6,7 @@
 #~~~~ control global settings ~~~~
 # make opt=1 --> enable optimisation, then disable debug
 # make opt=0 --> disable optimisation, then enable debug
-opt=0
+opt=1
 # make clang=1 --> use clang/clang++, not gcc/g++
 # make clang=0 --> use gcc/g++, not clang/clang++
 clang=0
@@ -36,10 +36,10 @@ endif
 CPPFLAGS=
 # CPPFLAGS+=-I header/path
 CPPFLAGS+=-I ${SFMLDIR}/include
-LDFLAGS=
+#LDFLAGS=
 # LDFLAGS+=-L library/path -Wl,-rpath,library/path -l library_name
-LDFLAGS=-L ${SFMLDIR}/lib -Wl,-rpath,${SFMLDIR}/lib \
-         -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS+= -L ${SFMLDIR}/lib -Wl,-rpath,${SFMLDIR}/lib \
+         -lsfml-graphics -lsfml-window -lsfml-system -static-libasan
 ifeq (${OS},Windows_NT)
   # nothing special for now
 else
@@ -88,8 +88,8 @@ else
   MAIN_C_FILES=${wildcard ${strip ${EXE_PREFIX}}*.c}
   MAIN_CXX_FILES=${wildcard ${strip ${EXE_PREFIX}}*.cpp}
 endif
-COMMON_C_FILES=${filter-out ${MAIN_C_FILES},${wildcard *.c}}
-COMMON_CXX_FILES=${filter-out ${MAIN_CXX_FILES},${wildcard *.cpp}}
+COMMON_C_FILES=${filter-out ${MAIN_C_FILES},${wildcard */*.c}}
+COMMON_CXX_FILES=${filter-out ${MAIN_CXX_FILES},${wildcard */*.cpp}}
 #
 MAIN_OBJECT_FILES=${sort ${patsubst %.c,%.o,${MAIN_C_FILES}} \
                          ${patsubst %.cpp,%.o,${MAIN_CXX_FILES}}}
